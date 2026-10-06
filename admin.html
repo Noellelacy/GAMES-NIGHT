@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - THE NIGHT SHIFT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Cabinet Grotesk"', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            night: {
+              base: '#040D0A',
+              card: '#0B1C15',
+              input: '#10261D',
+              border: '#1A3D30',
+              emerald: '#10B981',
+              purple: '#A855F7',
+              gold: '#FACC15',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .mesh-ambient {
+      background:
+        radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.18) 0%, transparent 40%),
+        radial-gradient(circle at 85% 25%, rgba(168, 85, 247, 0.2) 0%, transparent 45%),
+        radial-gradient(circle at 50% 85%, rgba(250, 204, 21, 0.08) 0%, transparent 50%);
+    }
+  </style>
+</head>
+
+<body class="bg-night-base text-slate-100 font-sans min-h-screen relative overflow-x-hidden">
+  <div class="fixed inset-0 pointer-events-none z-0 mesh-ambient"></div>
+
+  <!-- Login Screen -->
+  <div id="login-screen" class="relative z-10 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-night-card/90 border border-night-border rounded-3xl p-8 w-full max-w-md backdrop-blur-xl shadow-2xl">
+      <div class="text-center mb-8">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-night-emerald via-night-purple to-night-gold flex items-center justify-center text-3xl mx-auto mb-4 shadow-lg shadow-night-emerald/20">
+          👩🏾‍🦲
+        </div>
+        <h1 class="text-2xl font-bold font-display text-white mb-2">Admin Access</h1>
+        <p class="text-sm text-slate-400">Enter your password to access the dashboard</p>
+      </div>
+
+      <form onsubmit="handleLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Password</label>
+          <input
+            type="password"
+            id="admin-password"
+            required
+            placeholder="Enter admin password"
+            class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-night-emerald transition-all font-medium"
+          >
+        </div>
+        <button
+          type="submit"
+          class="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-night-emerald to-night-purple text-white font-display font-bold shadow-xl shadow-night-emerald/25 hover:opacity-95 transition-all"
+        >
+          Access Dashboard
+        </button>
+      </form>
+
+      <p id="login-error" class="text-center text-red-400 text-sm mt-4 hidden">Incorrect password</p>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard (Hidden by default) -->
+  <div id="admin-dashboard" class="relative z-10 hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+      
+      <!-- Header -->
+      <header class="flex items-center justify-between pb-6 border-b border-night-border/60 mb-8">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-night-emerald via-night-purple to-night-gold flex items-center justify-center text-xl shadow-lg shadow-night-emerald/20">
+            👩🏾‍🦲
+          </div>
+          <div>
+            <div class="text-[11px] font-extrabold uppercase tracking-widest text-night-emerald">ADMIN PANEL</div>
+            <h2 class="text-lg font-bold font-display text-white">THE NIGHT SHIFT Dashboard</h2>
+          </div>
+        </div>
+        <button onclick="logout()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-night-card border border-night-border text-slate-300 hover:text-white hover:bg-night-border/40 transition-all">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+          Logout
+        </button>
+      </header>
+
+      <!-- Tabs -->
+      <div class="flex gap-2 mb-8 bg-night-input p-1 rounded-xl border border-night-border w-fit">
+        <button onclick="switchTab('rsvps')" id="tab-rsvps" class="px-4 py-2 rounded-lg font-bold bg-night-emerald text-night-base transition-all">RSVPs</button>
+        <button onclick="switchTab('settings')" id="tab-settings" class="px-4 py-2 rounded-lg font-semibold text-slate-400 hover:text-white transition-all">Settings</button>
+        <button onclick="switchTab('export')" id="tab-export" class="px-4 py-2 rounded-lg font-semibold text-slate-400 hover:text-white transition-all">Export</button>
+      </div>
+
+      <!-- RSVPs Tab -->
+      <div id="panel-rsvps" class="space-y-6">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-night-card/90 border border-night-border p-4 rounded-2xl">
+            <div class="text-3xl font-black font-display text-night-emerald" id="admin-total">0</div>
+            <div class="text-xs text-slate-400">Total RSVPs</div>
+          </div>
+          <div class="bg-night-card/90 border border-night-border p-4 rounded-2xl">
+            <div class="text-3xl font-black font-display text-green-400" id="admin-attending">0</div>
+            <div class="text-xs text-slate-400">Attending</div>
+          </div>
+          <div class="bg-night-card/90 border border-night-border p-4 rounded-2xl">
+            <div class="text-3xl font-black font-display text-night-gold" id="admin-parking">0</div>
+            <div class="text-xs text-slate-400">Parking Spots</div>
+          </div>
+          <div class="bg-night-card/90 border border-night-border p-4 rounded-2xl">
+            <div class="text-3xl font-black font-display text-night-purple" id="admin-items">0</div>
+            <div class="text-xs text-slate-400">Items</div>
+          </div>
+        </div>
+
+        <!-- RSVP Table -->
+        <div class="bg-night-card/90 border border-night-border rounded-2xl overflow-hidden">
+          <div class="p-4 border-b border-night-border flex items-center justify-between">
+            <h3 class="font-bold text-white flex items-center gap-2">
+              All RSVPs
+              <span id="live-indicator" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse hidden" title="Live Sync Active"></span>
+            </h3>
+            <button onclick="clearAllRsvps()" class="text-xs text-red-400 hover:text-red-300 font-semibold">Clear All</button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead class="bg-night-input">
+                <tr>
+                  <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Name</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Status</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Vibe</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Parking</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Items</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Deck Vote</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Notes</th>
+                  <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-rsvp-table">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div id="panel-settings" class="hidden space-y-6">
+        <div class="bg-night-card/90 border border-night-border rounded-2xl p-6">
+          <h3 class="font-bold text-white mb-6">Event Configuration</h3>
+          
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Event Title</label>
+              <input
+                type="text"
+                id="setting-title"
+                class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-night-emerald transition-all"
+                value="THE NIGHT SHIFT"
+              >
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Max Parking Spots</label>
+              <input
+                type="number"
+                id="setting-parking"
+                class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-night-emerald transition-all"
+                value="8"
+              >
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Event Date/Time</label>
+              <input
+                type="text"
+                id="setting-datetime"
+                class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-night-emerald transition-all"
+                value="Friday Night • 6:00 PM - 10:00 PM"
+              >
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Location</label>
+              <input
+                type="text"
+                id="setting-location"
+                class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-night-emerald transition-all"
+                value="NOELLELACY'S CABAN (After you RSVP)"
+              >
+            </div>
+
+            <button onclick="saveSettings()" class="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-night-emerald to-night-purple text-white font-display font-bold shadow-xl shadow-night-emerald/25 hover:opacity-95 transition-all">
+              Save Settings
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Export Tab -->
+      <div id="panel-export" class="hidden space-y-6">
+        <div class="bg-night-card/90 border border-night-border rounded-2xl p-6">
+          <h3 class="font-bold text-white mb-6">Export Data</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <button onclick="exportCSV()" class="flex items-center justify-center gap-2 p-4 rounded-xl bg-night-input border border-night-border hover:border-night-emerald transition-all">
+              <i data-lucide="download" class="w-5 h-5 text-night-emerald"></i>
+              <span class="font-semibold">Download CSV</span>
+            </button>
+            
+            <button onclick="exportJSON()" class="flex items-center justify-center gap-2 p-4 rounded-xl bg-night-input border border-night-border hover:border-night-purple transition-all">
+              <i data-lucide="file-json" class="w-5 h-5 text-night-purple"></i>
+              <span class="font-semibold">Download JSON</span>
+            </button>
+
+            <button onclick="copyWhatsAppAdmin()" class="flex items-center justify-center gap-2 p-4 rounded-xl bg-night-input border border-night-border hover:border-night-gold transition-all">
+              <i data-lucide="copy" class="w-5 h-5 text-night-gold"></i>
+              <span class="font-semibold">Copy WhatsApp Summary</span>
+            </button>
+
+            <button onclick="importData()" class="flex items-center justify-center gap-2 p-4 rounded-xl bg-night-input border border-night-border hover:border-rose-500 transition-all">
+              <i data-lucide="upload" class="w-5 h-5 text-rose-400"></i>
+              <span class="font-semibold">Import Data</span>
+            </button>
+          </div>
+
+          <div id="import-area" class="hidden mt-4">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Import JSON Data</label>
+            <textarea
+              id="import-textarea"
+              rows="6"
+              placeholder="Paste JSON data here..."
+              class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-night-emerald transition-all"
+            ></textarea>
+            <button onclick="processImport()" class="mt-2 py-2 px-4 rounded-xl bg-night-emerald text-white font-semibold hover:opacity-95 transition-all">
+              Process Import
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div id="edit-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-night-card border border-night-border rounded-2xl p-6 w-full max-w-lg">
+      <h3 class="font-bold text-white mb-4">Edit RSVP</h3>
+      <form onsubmit="saveEdit(event)" class="space-y-4">
+        <input type="hidden" id="edit-id">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Name</label>
+          <input type="text" id="edit-name" class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-sm text-slate-100">
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Status</label>
+          <select id="edit-status" class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-sm text-slate-100">
+            <option value="going">Going</option>
+            <option value="late">Maybe</option>
+            <option value="ghosting">Out</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Notes</label>
+          <textarea id="edit-notes" rows="3" class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-sm text-slate-100"></textarea>
+        </div>
+        <div class="flex gap-2">
+          <button type="submit" class="flex-1 py-2 rounded-xl bg-night-emerald text-white font-semibold hover:opacity-95 transition-all">Save</button>
+          <button type="button" onclick="closeEditModal()" class="flex-1 py-2 rounded-xl bg-night-input text-slate-300 font-semibold hover:text-white transition-all">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ----------------------------------------------------
+    // LIVE SUPABASE CONFIGURATION
+    // ----------------------------------------------------
+    const SUPABASE_URL = 'https://dzjaobqsesiuibdcdqpi.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6amFvYnFzZXNpdWliZGNkcXBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzMTc2MDYsImV4cCI6MjEwNjg5MzYwNn0.bTLvB-ejlZScKhwLqpoyUyDszOmmpyANd7F8uMOm_10';
+    
+    let supabaseClient = null;
+    let useLocalStorage = true;
+    let rsvpList = [];
+
+    // Safely initialize Supabase
+    if (window.supabase) {
+      try {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        useLocalStorage = false;
+      } catch (e) {
+        console.error('Supabase init failed, falling back to localStorage:', e);
+      }
+    }
+
+    const ADMIN_PASSWORD = 'nightshift2024'; // Password to login
+    const STORAGE_KEY = 'noellelacy_gamenight_rsvp_list_v2';
+    const SETTINGS_KEY = 'noellelacy_gamenight_settings';
+    const SESSION_KEY = 'noellelacy_admin_session';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const session = sessionStorage.getItem(SESSION_KEY);
+      if (session === 'authenticated') {
+        showDashboard();
+      }
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    });
+
+    function handleLogin(event) {
+      event.preventDefault();
+      // Added .trim() to ensure trailing spaces from copy-pasting don't break the password
+      const password = document.getElementById('admin-password').value.trim();
+      
+      if (password === ADMIN_PASSWORD) {
+        sessionStorage.setItem(SESSION_KEY, 'authenticated');
+        showDashboard();
+      } else {
+        document.getElementById('login-error').classList.remove('hidden');
+        document.getElementById('admin-password').value = '';
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem(SESSION_KEY);
+      document.getElementById('admin-dashboard').classList.add('hidden');
+      document.getElementById('login-screen').classList.remove('hidden');
+      document.getElementById('admin-password').value = '';
+      document.getElementById('login-error').classList.add('hidden');
+    }
+
+    function showDashboard() {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('admin-dashboard').classList.remove('hidden');
+      loadRsvps();
+      loadSettings();
+      initRealtimeSubscription();
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+
+    function switchTab(tab) {
+      ['rsvps', 'settings', 'export'].forEach(t => {
+        document.getElementById(`panel-${t}`).classList.add('hidden');
+        document.getElementById(`tab-${t}`).className = 'px-4 py-2 rounded-lg font-semibold text-slate-400 hover:text-white transition-all';
+      });
+      document.getElementById(`panel-${tab}`).classList.remove('hidden');
+      document.getElementById(`tab-${tab}`).className = 'px-4 py-2 rounded-lg font-bold bg-night-emerald text-night-base transition-all';
+    }
+
+    // --- SUPABASE SYNC LOGIC ---
+
+    async function loadRsvps() {
+      if (!useLocalStorage && supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('rsvps')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+          if (!error && data) {
+            rsvpList = data.map(r => ({
+              id: r.id,
+              name: r.name,
+              status: r.status,
+              vibe: r.vibe,
+              parking: r.parking,
+              items: r.items || [],
+              deckVote: r.deck_vote || r.deckVote || 'No',
+              notes: r.notes || '',
+              timestamp: r.created_at ? new Date(r.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''
+            }));
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(rsvpList)); // Cache locally
+          }
+        } catch (err) {
+          console.error("Supabase load failed", err);
+        }
+      } else {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        rsvpList = stored ? JSON.parse(stored) : [];
+      }
+      updateAdminUI();
+    }
+
+    function initRealtimeSubscription() {
+      if (!supabaseClient) return;
+      document.getElementById('live-indicator').classList.remove('hidden'); // Show pulsing green dot
+      supabaseClient
+        .channel('admin-updates')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'rsvps' }, () => {
+          loadRsvps(); // Reload table automatically if new guest registers
+        })
+        .subscribe();
+    }
+
+    function updateAdminUI() {
+      document.getElementById('admin-total').textContent = rsvpList.length;
+      document.getElementById('admin-attending').textContent = rsvpList.filter(r => r.status === 'going' || r.status === 'late').length;
+      document.getElementById('admin-parking').textContent = rsvpList.filter(r => r.status !== 'ghosting' && r.parking === 'driving_spot').length;
+      document.getElementById('admin-items').textContent = rsvpList.reduce((acc, r) => acc + (r.items ? r.items.length : 0), 0);
+
+      const tbody = document.getElementById('admin-rsvp-table');
+      
+      if (rsvpList.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="px-4 py-8 text-center text-slate-500">No RSVPs yet</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = rsvpList.map(r => `
+        <tr class="border-b border-night-border/50 hover:bg-night-input/30">
+          <td class="px-4 py-3 text-sm font-medium text-white">${escapeHtml(r.name)}</td>
+          <td class="px-4 py-3 text-sm">
+            <span class="px-2 py-1 rounded-full text-xs font-semibold ${
+              r.status === 'going' ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800' :
+              r.status === 'late' ? 'bg-amber-950/80 text-amber-300 border border-amber-800' :
+              'bg-slate-900 text-slate-400 border border-slate-700'
+            }">
+              ${r.status === 'going' ? '🎯 In' : r.status === 'late' ? '⏳ Maybe' : '❌ Out'}
+            </span>
+          </td>
+          <td class="px-4 py-3 text-sm text-slate-300">${escapeHtml(r.vibe || '-')}</td>
+          <td class="px-4 py-3 text-sm text-slate-300">${r.parking === 'driving_spot' ? '🚗 Spot' : r.parking === 'carpool' ? '👥 Carpool' : '🚕 Bolt'}</td>
+          <td class="px-4 py-3 text-sm text-slate-300 max-w-xs truncate">${r.items ? r.items.join(', ') : '-'}</td>
+          <td class="px-4 py-3 text-sm text-slate-300">${r.deckVote === 'Yes' ? '🔥 Yes' : '❌ No'}</td>
+          <td class="px-4 py-3 text-sm text-slate-400 italic max-w-xs truncate">${escapeHtml(r.notes || '-')}</td>
+          <td class="px-4 py-3 text-sm">
+            <div class="flex gap-2">
+              <button onclick="editRsvp('${r.id}')" class="text-night-emerald hover:text-emerald-300">Edit</button>
+              <button onclick="deleteRsvp('${r.id}')" class="text-red-400 hover:text-red-300">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function editRsvp(id) {
+      const rsvp = rsvpList.find(r => r.id === id);
+      if (!rsvp) return;
+
+      document.getElementById('edit-id').value = id;
+      document.getElementById('edit-name').value = rsvp.name;
+      document.getElementById('edit-status').value = rsvp.status;
+      document.getElementById('edit-notes').value = rsvp.notes || '';
+      document.getElementById('edit-modal').classList.remove('hidden');
+    }
+
+    function closeEditModal() {
+      document.getElementById('edit-modal').classList.add('hidden');
+    }
+
+    async function saveEdit(event) {
+      event.preventDefault();
+      const id = document.getElementById('edit-id').value;
+      const name = document.getElementById('edit-name').value;
+      const status = document.getElementById('edit-status').value;
+      const notes = document.getElementById('edit-notes').value;
+      
+      // Update cloud DB
+      if (!useLocalStorage && supabaseClient) {
+        await supabaseClient.from('rsvps').update({ name, status, notes }).eq('id', id);
+      }
+
+      // Update locally immediately
+      const idx = rsvpList.findIndex(r => r.id === id);
+      if (idx >= 0) {
+        rsvpList[idx].name = name;
+        rsvpList[idx].status = status;
+        rsvpList[idx].notes = notes;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(rsvpList));
+      }
+      
+      loadRsvps();
+      closeEditModal();
+    }
+
+    async function deleteRsvp(id) {
+      if (!confirm('Are you sure you want to delete this RSVP?')) return;
+      
+      if (!useLocalStorage && supabaseClient) {
+        const { error } = await supabaseClient.from('rsvps').delete().eq('id', id);
+        if (error) console.error("Error deleting:", error);
+      }
+
+      rsvpList = rsvpList.filter(r => r.id !== id);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(rsvpList));
+      loadRsvps();
+    }
+
+    async function clearAllRsvps() {
+      if (!confirm('Are you sure you want to delete ALL RSVPs? This cannot be undone!')) return;
+      
+      if (!useLocalStorage && supabaseClient) {
+        await supabaseClient.from('rsvps').delete().neq('id', '0'); // Fast delete all hack
+      }
+      
+      rsvpList = [];
+      localStorage.removeItem(STORAGE_KEY);
+      loadRsvps();
+    }
+
+    // --- OTHER SETTINGS / EXPORTS ---
+
+    function loadSettings() {
+      const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+      document.getElementById('setting-title').value = settings.title || 'THE NIGHT SHIFT';
+      document.getElementById('setting-parking').value = settings.parking || 8;
+      document.getElementById('setting-datetime').value = settings.datetime || 'Friday Night • 6:00 PM - 10:00 PM';
+      document.getElementById('setting-location').value = settings.location || "NOELLELACY'S CABAN (After you RSVP)";
+    }
+
+    function saveSettings() {
+      const settings = {
+        title: document.getElementById('setting-title').value,
+        parking: parseInt(document.getElementById('setting-parking').value),
+        datetime: document.getElementById('setting-datetime').value,
+        location: document.getElementById('setting-location').value
+      };
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+      alert('Settings saved! They will be applied to the frontend.');
+    }
+
+    function exportCSV() {
+      const headers = ['Name', 'Status', 'Vibe', 'Parking', 'Items', 'Deck Vote', 'Notes', 'Timestamp'];
+      const rows = rsvpList.map(r => [
+        r.name,
+        r.status,
+        r.vibe || '',
+        r.parking,
+        r.items ? r.items.join('; ') : '',
+        r.deckVote,
+        r.notes || '',
+        r.timestamp || ''
+      ]);
+      const csv = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+      downloadFile(csv, 'nightshift-rsvps.csv', 'text/csv');
+    }
+
+    function exportJSON() {
+      downloadFile(JSON.stringify(rsvpList, null, 2), 'nightshift-rsvps.json', 'application/json');
+    }
+
+    function copyWhatsAppAdmin() {
+      const confirmed = rsvpList.filter(r => r.status === 'going' || r.status === 'late');
+      const drivers = rsvpList.filter(r => r.status !== 'ghosting' && r.parking === 'driving_spot');
+      
+      let summary = `🎲 THE NIGHT SHIFT: NOELLELACY'S GAME NIGHT PT. 2 (ADMIN SUMMARY)\n`;
+      summary += `Confirmed Squad: ${confirmed.length} players\n`;
+      summary += `Driveway Spots Claimed (${drivers.length}/8): ${drivers.map(d => d.name).join(', ') || 'None'}\n\n`;
+      summary += `👥 FULL ROSTER:\n`;
+      rsvpList.forEach(r => {
+        const status = r.status === 'going' ? '🎯 In' : r.status === 'late' ? '⏳ Maybe' : '❌ Out';
+        summary += `${status} ${r.name} | ${r.parking} | ${r.items ? r.items.join(', ') : 'None'}\n`;
+      });
+      
+      navigator.clipboard.writeText(summary);
+      alert('Summary copied to clipboard!');
+    }
+
+    function importData() {
+      document.getElementById('import-area').classList.toggle('hidden');
+    }
+
+    async function processImport() {
+      try {
+        const data = JSON.parse(document.getElementById('import-textarea').value);
+        if (Array.isArray(data)) {
+          if (!useLocalStorage && supabaseClient) {
+            const mappedData = data.map(r => ({
+              id: r.id || 'ad-' + Date.now() + Math.random(),
+              name: r.name,
+              status: r.status,
+              vibe: r.vibe,
+              parking: r.parking,
+              items: r.items || [],
+              deck_vote: r.deckVote || 'No',
+              notes: r.notes || ''
+            }));
+            await supabaseClient.from('rsvps').upsert(mappedData);
+          }
+
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+          loadRsvps();
+          document.getElementById('import-area').classList.add('hidden');
+          document.getElementById('import-textarea').value = '';
+          alert('Data imported successfully!');
+        } else {
+          alert('Invalid JSON format. Expected an array.');
+        }
+      } catch (e) {
+        alert('Invalid JSON. Please check your input.');
+      }
+    }
+
+    function downloadFile(content, filename, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+</body>
+</html>

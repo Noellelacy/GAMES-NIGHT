@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE NIGHT SHIFT // Noellelacy's Game Night Pt. 2 🍸🎲</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts & Lucide Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Cabinet Grotesk"', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            night: {
+              base: '#040D0A',       
+              card: '#0B1C15',       
+              input: '#10261D',      
+              border: '#1A3D30',     
+              emerald: '#10B981',    
+              purple: '#A855F7',     
+              gold: '#FACC15',       
+            }
+          },
+          animation: {
+            'glow-pulse': 'glowPulse 3s ease-in-out infinite',
+            'float-slow': 'float 5s ease-in-out infinite',
+          },
+          keyframes: {
+            glowPulse: {
+              '0%, 100%': { opacity: '0.4' },
+              '50%': { opacity: '0.8' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-6px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .neon-text-gradient {
+      background: linear-gradient(135deg, #FFFFFF 15%, #A7F3D0 45%, #C084FC 80%, #FACC15 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .neon-border-glow:focus-within {
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.35), 0 0 10px rgba(168, 85, 247, 0.25);
+    }
+    .mesh-ambient {
+      background:
+        radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.18) 0%, transparent 40%),
+        radial-gradient(circle at 85% 25%, rgba(168, 85, 247, 0.2) 0%, transparent 45%),
+        radial-gradient(circle at 50% 85%, rgba(250, 204, 21, 0.08) 0%, transparent 50%);
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #040D0A;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1A3D30;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #2A5A48;
+    }
+  </style>
+</head>
+
+<body class="bg-night-base text-slate-100 font-sans min-h-screen relative overflow-x-hidden selection:bg-night-emerald selection:text-night-base">
+  <div class="fixed inset-0 pointer-events-none z-0 mesh-ambient"></div>
+
+  <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+   
+    <!-- Top Navigation Bar -->
+    <header class="flex items-center justify-between pb-6 border-b border-night-border/60 mb-8 sm:mb-12">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-night-emerald via-night-purple to-night-gold flex items-center justify-center text-xl shadow-lg shadow-night-emerald/20 animate-float-slow">
+          👩🏾‍🦲
+        </div>
+        <div>
+          <div class="text-[11px] font-extrabold uppercase tracking-widest text-night-emerald flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-night-emerald animate-ping"></span>
+            Noellelacy's Game Night Pt. 2
+          </div>
+          <h2 class="text-lg font-bold font-display text-white">THE NIGHT SHIFT</h2>
+        </div>
+      </div>
+
+      <a href="admin.html" class="text-[10px] text-slate-600 hover:text-night-emerald transition-colors uppercase tracking-wider font-semibold">
+        Admin
+      </a>
+
+    </header>
+
+    <!-- Hero Header -->
+    <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-night-card border border-night-border text-night-gold text-xs font-bold mb-4 shadow-sm">
+        <span>👩🏾‍🦲✨ NO SORE LOSERS • 21+ • NOELLELACY'S GAME NIGHT PT. 2</span>
+      </div>
+     
+      <h1 class="text-4xl sm:text-6xl font-black font-display tracking-tight neon-text-gradient mb-2 leading-[1.1]" id="event-title-display">
+        THE NIGHT SHIFT
+      </h1>
+      <p class="text-sm sm:text-base font-bold text-night-purple uppercase tracking-wider mb-4">
+        // The Official Living Room Game Night
+      </p>
+     
+      <p class="text-slate-300 text-sm sm:text-base max-w-xl mx-auto mb-8 font-normal leading-relaxed">
+        Survey says: slide decks, cards, drinking games, and heavy drinking from start to finish. If the night has a saying after, we’ll see where it goes. RSVP below so I know what we’re working with.
+      </p>
+
+      <!-- Key Details Badges -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl mx-auto text-left mb-6">
+        <div class="bg-night-card/80 backdrop-blur-md border border-night-border/80 p-3.5 rounded-2xl flex items-center gap-3">
+          <div class="p-2.5 bg-night-emerald/10 text-night-emerald rounded-xl">
+            <i data-lucide="clock" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">When</div>
+            <div class="text-sm font-bold text-white event-datetime">Friday Night • 6:00 PM - 10:00 PM</div>
+          </div>
+        </div>
+
+        <div class="bg-night-card/80 backdrop-blur-md border border-night-border/80 p-3.5 rounded-2xl flex items-center gap-3">
+          <div class="p-2.5 bg-night-purple/15 text-night-purple rounded-xl">
+            <i data-lucide="map-pin" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Where</div>
+            <div class="text-sm font-bold text-white event-location">NOELLELACY'S CABAN (After you RSVP)</div>
+          </div>
+        </div>
+
+        <div class="bg-night-card/80 backdrop-blur-md border border-night-border/80 p-3.5 rounded-2xl flex items-center gap-3">
+          <div class="p-2.5 bg-night-gold/15 text-night-gold rounded-xl">
+            <i data-lucide="wine" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">House Rule</div>
+            <div class="text-sm font-bold text-white">BYOB + Snacks + Intoxicants</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN INTERACTIVE GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+     
+      <!-- LEFT COLUMN: RSVP Form -->
+      <div id="rsvp-section" class="lg:col-span-7 bg-night-card/90 border border-night-border rounded-3xl p-6 sm:p-8 backdrop-blur-xl shadow-2xl relative">
+       
+        <div class="flex items-center justify-between pb-5 border-b border-night-border/70 mb-6">
+          <div>
+            <h2 class="text-2xl font-bold font-display text-white flex items-center gap-2">
+              <span>Your VIP Pass</span>
+              <span class="text-xs bg-night-emerald/20 text-night-emerald border border-night-emerald/40 px-2.5 py-0.5 rounded-full font-bold">Quick RSVP</span>
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Let Noellelacy know if you're taking the shift.</p>
+          </div>
+          <span class="text-2xl">🎲</span>
+        </div>
+
+        <form id="rsvp-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
+         
+          <!-- Name / Alias -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2" for="guest-name">
+              Your Name / Alias <span class="text-night-emerald">*</span>
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                <i data-lucide="user" class="w-4 h-4"></i>
+              </div>
+              <input
+                type="text"
+                id="guest-name"
+                name="guestName"
+                required
+                placeholder="e.g. Alex, Jordan, or 'Uno King'"
+                class="w-full bg-night-input border border-night-border rounded-xl pl-10 pr-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-night-emerald transition-all font-medium"
+              >
+            </div>
+          </div>
+
+          <!-- Roll Call Status -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+              Roll Call Status <span class="text-night-emerald">*</span>
+            </label>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <label class="flex items-center gap-3 p-3 rounded-xl border border-night-border bg-night-input cursor-pointer hover:border-night-emerald/60 transition-all has-[:checked]:border-night-emerald has-[:checked]:bg-night-emerald/15">
+                <input type="radio" name="attendance" value="going" checked class="text-night-emerald focus:ring-0">
+                <div class="text-xs">
+                  <div class="font-bold text-white">🎯 Survey Says: I'm In!</div>
+                  <div class="text-[10px] text-slate-400">Locked and loaded</div>
+                </div>
+              </label>
+
+              <label class="flex items-center gap-3 p-3 rounded-xl border border-night-border bg-night-input cursor-pointer hover:border-night-gold/60 transition-all has-[:checked]:border-night-gold has-[:checked]:bg-night-gold/15">
+                <input type="radio" name="attendance" value="late" class="text-night-gold focus:ring-0">
+                <div class="text-xs">
+                  <div class="font-bold text-white">⏳ 50/50</div>
+                  <div class="text-[10px] text-slate-400">Maybe</div>
+                </div>
+              </label>
+
+              <label class="flex items-center gap-3 p-3 rounded-xl border border-night-border bg-night-input cursor-pointer hover:border-slate-500/60 transition-all has-[:checked]:border-slate-500 has-[:checked]:bg-slate-800/40">
+                <input type="radio" name="attendance" value="ghosting" class="text-slate-400 focus:ring-0">
+                <div class="text-xs">
+                  <div class="font-bold text-slate-300">❌ Sitting this out</div>
+                  <div class="text-[10px] text-slate-500">Can't make it</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Drinking & Partaking Vibe -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
+              Tonight's Drinking & Partaking Vibe
+            </label>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 p-1.5 bg-night-input rounded-xl border border-night-border">
+              <label class="text-center py-2.5 px-2 text-xs font-semibold rounded-lg cursor-pointer transition-all has-[:checked]:bg-night-emerald has-[:checked]:text-night-base text-slate-400 hover:text-white">
+                <input type="radio" name="drinkingVibe" value="Heavy Drinking" checked class="sr-only">
+                <span>🥃 Heavy Drinking</span>
+              </label>
+              <label class="text-center py-2.5 px-2 text-xs font-semibold rounded-lg cursor-pointer transition-all has-[:checked]:bg-night-purple has-[:checked]:text-white text-slate-400 hover:text-white">
+                <input type="radio" name="drinkingVibe" value="Chill / Sip" class="sr-only">
+                <span>🍷 Casual Sips</span>
+              </label>
+              <label class="text-center py-2.5 px-2 text-xs font-semibold rounded-lg cursor-pointer transition-all has-[:checked]:bg-night-gold has-[:checked]:text-night-base text-slate-400 hover:text-white">
+                <input type="radio" name="drinkingVibe" value="Other Things" class="sr-only">
+                <span>🍃 Only Other Treats</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Parking & Transportation -->
+          <div class="bg-night-input/80 p-4 sm:p-5 rounded-2xl border border-night-border">
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-xs font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
+                <i data-lucide="car" class="w-4 h-4 text-night-gold"></i>
+                <span>Parking & Pulling Up</span>
+              </label>
+              <span id="parking-slot-pill" class="text-[11px] font-bold text-night-gold bg-night-gold/10 border border-night-gold/30 px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-night-gold animate-pulse"></span>
+                <span>Checking spots...</span>
+              </span>
+            </div>
+            
+            <p class="text-xs text-slate-400 mb-3">
+              Driveway & curbside space is capped at <strong id="max-parking-display">8 spots</strong>. If you're drinking heavy, Bolt is the play.
+            </p>
+
+            <div class="space-y-2.5">
+              <label class="flex items-start gap-3 p-3 rounded-xl border border-night-border/80 bg-night-card hover:bg-night-border/40 cursor-pointer transition-all has-[:checked]:border-night-gold has-[:checked]:bg-night-gold/10">
+                <input type="radio" name="parkingOption" value="driving_spot" checked class="mt-1 text-night-gold focus:ring-0">
+                <div class="text-xs">
+                  <div class="font-bold text-white flex items-center gap-2">
+                    <span>🚗 Driving Solo / Got My Own Car</span>
+                    <span class="text-[10px] text-night-gold font-semibold bg-night-gold/10 border border-night-gold/20 px-1.5 py-0.2 rounded">+1 Spot Claimed</span>
+                  </div>
+                  <p class="text-[11px] text-slate-400 mt-0.5">Locks in 1 of the 8 driveway parking spots.</p>
+                </div>
+              </label>
+
+              <label class="flex items-start gap-3 p-3 rounded-xl border border-night-border/80 bg-night-card hover:bg-night-border/40 cursor-pointer transition-all has-[:checked]:border-night-purple has-[:checked]:bg-night-purple/10">
+                <input type="radio" name="parkingOption" value="carpool" class="mt-1 text-night-purple focus:ring-0">
+                <div class="text-xs">
+                  <div class="font-bold text-white flex items-center gap-2">
+                    <span>👥 Carpooling With Someone</span>
+                    <span class="text-[10px] text-purple-300 font-semibold bg-purple-400/10 border border-purple-400/20 px-1.5 py-0.2 rounded">0 Spot Used</span>
+                  </div>
+                  <p class="text-[11px] text-slate-400 mt-0.5">Riding with someone who already has a claimed spot.</p>
+                </div>
+              </label>
+
+              <label class="flex items-start gap-3 p-3 rounded-xl border border-night-border/80 bg-night-card hover:bg-night-border/40 cursor-pointer transition-all has-[:checked]:border-night-emerald has-[:checked]:bg-night-emerald/10">
+                <input type="radio" name="parkingOption" value="uber_bolt" class="mt-1 text-night-emerald focus:ring-0">
+                <div class="text-xs">
+                  <div class="font-bold text-white flex items-center gap-2">
+                    <span>🚕 Taking a Bolt / Uber / Getting Dropped Off</span>
+                    <span class="text-[10px] text-emerald-300 font-semibold bg-emerald-400/10 border border-emerald-400/20 px-1.5 py-0.2 rounded">Zero Footprint</span>
+                  </div>
+                  <p class="text-[11px] text-slate-400 mt-0.5">Recommended if taking advantage of the heavy drinking rule.</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- SECTION 1: Libations, Intoxicants & Bites -->
+          <div class="bg-night-input/80 p-4 sm:p-5 rounded-2xl border border-night-border space-y-4">
+            <div class="flex items-center justify-between pb-2 border-b border-night-border/50">
+              <label class="text-xs font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
+                <i data-lucide="wine" class="w-4 h-4 text-night-emerald"></i>
+                <span>Libations, Intoxicants & Bites</span>
+              </label>
+              <span class="text-[11px] text-night-emerald font-medium">BYOB + Table items</span>
+            </div>
+
+            <!-- Alcohol & Intoxicants Options -->
+            <div>
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">🍾 Libations & Intoxicants</span>
+              <div class="flex flex-wrap gap-2">
+                <label class="cursor-pointer">
+                  <input type="checkbox" name="items" value="Toxic Juice (Alcohol)" class="peer sr-only">
+                  <span class="inline-block px-3 py-1.5 rounded-lg text-xs font-semibold bg-night-card text-slate-300 border border-night-border peer-checked:bg-night-emerald peer-checked:text-night-base peer-checked:border-night-emerald transition-all">
+                    🧪 Toxic Juice (Alcohol)
+                  </span>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="checkbox" name="items" value="Beer" class="peer sr-only">
+                  <span class="inline-block px-3 py-1.5 rounded-lg text-xs font-semibold bg-night-card text-slate-300 border border-night-border peer-checked:bg-night-emerald peer-checked:text-night-base peer-checked:border-night-emerald transition-all">
+                    🍺 Beer
+                  </span>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="checkbox" name="items" value="Wine" class="peer sr-only">
+                  <span class="inline-block px-3 py-1.5 rounded-lg text-xs font-semibold bg-night-card text-slate-300 border border-night-border peer-checked:bg-night-emerald peer-checked:text-night-base peer-checked:border-night-emerald transition-all">
+                    🍷 Wine
+                  </span>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="checkbox" name="items" value="Chasers" class="peer sr-only">
+                  <span class="inline-block px-3 py-1.5 rounded-lg text-xs font-semibold bg-night-card text-slate-300 border border-night-border peer-checked:bg-night-emerald peer-checked:text-night-base peer-checked:border-night-emerald transition-all">
+                    🥤 Chasers
+                  </span>
+                </label>
+
+                <label class="cursor-pointer">
+                  <input type="checkbox" name="items" value="Party treats / Infused snacks or gummies" class="peer sr-only">
+                  <span class="inline-block px-3 py-1.5 rounded-lg text-xs font-semibold bg-night-card text-slate-300 border border-night-border peer-checked:bg-night-purple peer-checked:text-white peer-checked:border-night-purple transition-all">
+                    🍃 Party Treats / Infused Snacks or Gummies
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Bites & Finger Foods Text Box -->
+            <div>
+              <label for="foodBites" class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                🍕 Bites & Finger Foods
+              </label>
+              <input
+                type="text"
+                id="foodBites"
+                name="foodBites"
+                placeholder="What finger foods or snacks are you bringing? (e.g. Suya, wings, chips & dip, pizza...)"
+                class="w-full bg-night-card border border-night-border text-xs sm:text-sm rounded-xl px-3.5 py-2.5 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-night-emerald transition-all font-medium"
+              >
+            </div>
+          </div>
+
+          <!-- SECTION 2: Optional Games & Controversial Presentation Poll -->
+          <div class="bg-night-input/80 p-4 sm:p-5 rounded-2xl border border-night-border space-y-4">
+            <div class="flex items-center justify-between pb-2 border-b border-night-border/50">
+              <label class="text-xs font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
+                <i data-lucide="gamepad-2" class="w-4 h-4 text-night-purple"></i>
+                <span>Optional to bring if you have any of the following</span>
+              </label>
+              <span class="text-[11px] text-night-purple font-medium">Games & Gear</span>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+              <label class="cursor-pointer">
+                <input type="checkbox" name="items" value="Drinking Game Deck (Buzzed / Do or Drink)" class="peer sr-only">
+                <span class="inline-block px-3 py-1.5 rounded-lg text-xs font-semibold bg-night-card text-slate-300 border border-night-border peer-checked:bg-night-purple peer-checked:text-white peer-checked:border-night-purple transition-all">
+                  🍺 Drinking Game Deck (Buzzed / Do or Drink)
+                </span>
+              </label>
+
+              <label class="cursor-pointer">
+                <input type="checkbox" name="items" value="Card Games (Cards Against Humanity / Uno)" class="peer sr-only">
+                <span class="inline-block px-3 py-1.5 rounded-lg text-xs font-semibold bg-night-card text-slate-300 border border-night-border peer-checked:bg-night-purple peer-checked:text-white peer-checked:border-night-purple transition-all">
+                  🃏 Card Games (Cards Against Humanity / Uno)
+                </span>
+              </label>
+            </div>
+
+            <!-- Other Games Text Box -->
+            <div>
+              <label for="otherGames" class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                🎲 Got any other games not listed above?
+              </label>
+              <input
+                type="text"
+                id="otherGames"
+                name="otherGames"
+                placeholder="Mention any board games, card decks, or gear you want to bring..."
+                class="w-full bg-night-card border border-night-border text-xs sm:text-sm rounded-xl px-3.5 py-2.5 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-night-purple transition-all font-medium"
+              >
+            </div>
+
+            <!-- Controversial Presentation Segment (Yes / No) -->
+            <div class="pt-3 border-t border-night-border/40">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-200 mb-1">
+                🔥 Controversial Presentation Deck Segment
+              </label>
+              <p class="text-[11px] text-slate-400 mb-2.5">
+                Drunk PowerPoint presentations on unhinged or controversial takes. Should we do this?
+              </p>
+
+              <div class="grid grid-cols-2 gap-2.5">
+                <label class="flex items-center gap-2.5 p-3 rounded-xl border border-night-border bg-night-card cursor-pointer hover:border-night-gold/60 transition-all has-[:checked]:border-night-gold has-[:checked]:bg-night-gold/15">
+                  <input type="radio" name="presentationDeckVote" value="Yes" checked class="text-night-gold focus:ring-0">
+                  <div class="text-xs font-bold text-white">
+                    🔥 Yes
+                    <span class="block text-[10px] text-slate-400 font-normal">Bring on the chaos</span>
+                  </div>
+                </label>
+
+                <label class="flex items-center gap-2.5 p-3 rounded-xl border border-night-border bg-night-card cursor-pointer hover:border-slate-500/60 transition-all has-[:checked]:border-slate-500 has-[:checked]:bg-slate-800/40">
+                  <input type="radio" name="presentationDeckVote" value="No" class="text-slate-400 focus:ring-0">
+                  <div class="text-xs font-bold text-slate-300">
+                    ❌ No
+                    <span class="block text-[10px] text-slate-500 font-normal">Stick to regular games</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+         <!-- Any Questions or Suggestions -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center justify-between" for="guest-notes">
+              <span class="flex items-center gap-2">
+                <i data-lucide="help-circle" class="w-4 h-4 text-night-purple"></i>
+                <span>Any Questions or Suggestions?</span>
+              </span>
+              <span class="text-slate-500 text-[10px] font-normal lowercase">(optional)</span>
+            </label>
+            <textarea
+              id="guest-notes"
+              name="guestNotes"
+              rows="3"
+              placeholder="Drop any questions or game suggestions for the night..."
+              class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-night-purple transition-all font-medium"
+            ></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <div>
+            <button
+              type="submit"
+              id="submit-rsvp-btn"
+              class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-night-emerald via-emerald-600 to-night-purple hover:opacity-95 text-white font-display text-lg font-bold shadow-xl shadow-night-emerald/25 active:scale-[0.99] transition-all flex items-center justify-center gap-2.5 cursor-pointer"
+            >
+              <i data-lucide="send" class="w-0 h-0"></i>
+              <span>Send My RSVP</span>
+            </button>
+            <p class="text-center text-[11px] text-slate-500 mt-2.5">
+              Plans change? Resubmit with the same name anytime to update your entry.
+            </p>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- RIGHT COLUMN: Live Capacity & Guest List -->
+      <div class="lg:col-span-5 space-y-6">
+       
+        <!-- Live Parking Capacity Card -->
+        <div class="bg-night-card/90 border border-night-border rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-xl">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2.5">
+              <div class="p-2.5 rounded-xl bg-night-gold/15 text-night-gold">
+                <i data-lucide="parking-circle" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-slate-100 font-display text-base">Driveway & Curbside Parking</h3>
+                <p class="text-xs text-slate-400">Strict 8-vehicle driveway limit</p>
+              </div>
+            </div>
+            <span class="text-sm font-black font-display px-3 py-1 rounded-full bg-night-input border border-night-border text-night-gold" id="parking-ratio-badge">
+              0 / 8 Spots
+            </span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full bg-night-input rounded-full h-3.5 p-0.5 overflow-hidden border border-night-border mb-2.5">
+            <div id="parking-meter-bar" class="h-full rounded-full bg-gradient-to-r from-night-emerald via-night-gold to-rose-500 transition-all duration-700" style="width: 0%;"></div>
+          </div>
+
+          <div class="flex items-center justify-between text-[11px] text-slate-400">
+            <span id="parking-status-desc">Driveway & curbside space open</span>
+            <span id="spots-remaining-count" class="font-semibold text-slate-200">8 spots left</span>
+          </div>
+        </div>
+
+        <!-- Quick Metrics Counter -->
+        <div class="grid grid-cols-3 gap-3">
+          <div class="bg-night-card/90 border border-night-border p-3.5 rounded-2xl text-center shadow-lg">
+            <div class="text-2xl font-black font-display text-night-emerald" id="stat-attending-count">0</div>
+            <div class="text-[11px] text-slate-400 font-medium">In The House</div>
+          </div>
+
+          <div class="bg-night-card/90 border border-night-border p-3.5 rounded-2xl text-center shadow-lg">
+            <div class="text-2xl font-black font-display text-night-purple" id="stat-items-count">0</div>
+            <div class="text-[11px] text-slate-400 font-medium">Bites & Bottles</div>
+          </div>
+
+          <div class="bg-night-card/90 border border-night-border p-3.5 rounded-2xl text-center shadow-lg">
+            <div class="text-2xl font-black font-display text-night-gold" id="stat-cars-count">0</div>
+            <div class="text-[11px] text-slate-400 font-medium">Cars Driving</div>
+          </div>
+        </div>
+
+        <!-- Survey Roll Call Card -->
+        <div class="bg-night-card/90 border border-night-border rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-xl flex flex-col h-[520px]">
+         
+          <div class="pb-3.5 border-b border-night-border space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="p-1.5 rounded-lg bg-night-emerald/10 text-night-emerald">
+                  <i data-lucide="users" class="w-4 h-4"></i>
+                </div>
+                <h3 class="font-bold text-slate-100 font-display text-base">Survey Roll Call</h3>
+              </div>
+              <span id="survey-total-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-night-input border border-night-border text-slate-300">
+                0 Total Responses
+              </span>
+            </div>
+
+            <!-- Survey Breakdown & Filter Tabs -->
+            <div class="flex items-center justify-between gap-2 flex-wrap text-[11px]">
+              <div class="flex items-center gap-1.5">
+                <span class="px-2 py-0.5 rounded-md bg-emerald-950/80 border border-emerald-800 text-emerald-400 font-semibold" id="count-in">
+                  🎯 In: 0
+                </span>
+                <span class="px-2 py-0.5 rounded-md bg-amber-950/80 border border-amber-800 text-amber-300 font-semibold" id="count-late">
+                  ⏳ Maybe: 0
+                </span>
+                <span class="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-700 text-slate-400 font-semibold" id="count-out">
+                  ❌ Out: 0
+                </span>
+              </div>
+
+              <!-- Filter Tabs -->
+              <div class="flex items-center gap-1 bg-night-input p-1 rounded-xl border border-night-border">
+                <button onclick="setRosterFilter('all')" id="tab-all" class="px-2.5 py-1 rounded-lg font-bold bg-night-emerald text-night-base transition-all">All</button>
+                <button onclick="setRosterFilter('going')" id="tab-going" class="px-2.5 py-1 rounded-lg font-semibold text-slate-400 hover:text-white transition-all">In</button>
+                <button onclick="setRosterFilter('items')" id="tab-items" class="px-2.5 py-1 rounded-lg font-semibold text-slate-400 hover:text-white transition-all">Brought</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Attendees Dynamic List -->
+          <div id="attendee-list" class="flex-1 overflow-y-auto pr-1 py-3 space-y-3 divide-y divide-night-border/40">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- WhatsApp / Host Quick Summary Bar -->
+          <div class="pt-3 border-t border-night-border flex items-center justify-between text-xs">
+            <span class="text-slate-500 text-[11px]">Syncs in real-time</span>
+            <button onclick="copyHostSummary()" class="text-night-emerald hover:text-emerald-300 font-bold inline-flex items-center gap-1.5 transition-colors">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span>Copy Summary for Group Chat</span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  </div>
+
+  <script>
+    // ----------------------------------------------------
+    // LIVE SUPABASE CONFIGURATION
+    // ----------------------------------------------------
+    const SUPABASE_URL = 'https://dzjaobqsesiuibdcdqpi.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6amFvYnFzZXNpdWliZGNkcXBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzMTc2MDYsImV4cCI6MjEwNjg5MzYwNn0.bTLvB-ejlZScKhwLqpoyUyDszOmmpyANd7F8uMOm_10';
+
+    let supabaseClient = null;
+    let useLocalStorage = true; 
+
+    if (window.supabase) {
+      try {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        useLocalStorage = false;
+        console.log('Supabase connected');
+      } catch (e) {
+        console.error('Supabase init failed, using localStorage:', e);
+      }
+    }
+
+    const SETTINGS_KEY = 'noellelacy_gamenight_settings';
+    const STORAGE_KEY = 'noellelacy_gamenight_rsvp_list_v2';
+
+    // Load settings from admin panel
+    const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+    const MAX_PARKING_SPOTS = settings.parking || 8;
+
+    if (settings.title) document.title = `${settings.title} // Noellelacy's Game Night Pt. 2 🍸🎲`;
+
+    let rsvpList = [];
+
+    // Load RSVPs from Supabase or localStorage
+    async function loadRsvps() {
+      if (!useLocalStorage && supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('rsvps')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+          if (error) throw error;
+          
+          // Map exact database columns to UI expectations
+          rsvpList = data.map(r => ({
+            id: r.id,
+            name: r.name,
+            status: r.status,
+            vibe: r.vibe,
+            parking: r.parking,
+            items: r.items || [],
+            deckVote: r.deck_vote || 'No', // Map DB deck_vote to UI deckVote
+            notes: r.notes || '',
+            timestamp: r.created_at ? new Date(r.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just now'
+          }));
+        } catch (e) {
+          console.error('Supabase load failed, using localStorage:', e);
+          loadRsvpsFromStorage();
+        }
+      } else {
+        loadRsvpsFromStorage();
+      }
+      updateDashboard();
+    }
+
+    function loadRsvpsFromStorage() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        rsvpList = stored ? JSON.parse(stored) : [];
+      } catch (e) {
+        rsvpList = [];
+      }
+    }
+
+    let currentFilter = 'all';
+
+    function updateDashboard() {
+      const countIn = rsvpList.filter(r => r.status === 'going').length;
+      const countLate = rsvpList.filter(r => r.status === 'late').length;
+      const countOut = rsvpList.filter(r => r.status === 'ghosting').length;
+      const totalResponses = rsvpList.length;
+
+      document.getElementById('survey-total-badge').textContent = `${totalResponses} Total Responses`;
+      document.getElementById('count-in').textContent = `🎯 In: ${countIn}`;
+      document.getElementById('count-late').textContent = `⏳ Maybe: ${countLate}`;
+      document.getElementById('count-out').textContent = `❌ Out: ${countOut}`;
+
+      const attendingCount = countIn + countLate;
+      const carsClaimed = rsvpList.filter(r => r.status !== 'ghosting' && r.parking === 'driving_spot').length;
+     
+      let allItems = [];
+      rsvpList.forEach(r => {
+        if (r.status !== 'ghosting') {
+          if (r.items && r.items.length) allItems.push(...r.items);
+        }
+      });
+
+      document.getElementById('stat-attending-count').textContent = attendingCount;
+      document.getElementById('stat-items-count').textContent = allItems.length;
+      document.getElementById('stat-cars-count').textContent = carsClaimed;
+
+      const spotsRemaining = Math.max(0, MAX_PARKING_SPOTS - carsClaimed);
+      const percentage = Math.min(100, Math.round((carsClaimed / MAX_PARKING_SPOTS) * 100));
+
+      const meterBar = document.getElementById('parking-meter-bar');
+      meterBar.style.width = `${percentage}%`;
+
+      document.getElementById('parking-ratio-badge').textContent = `${carsClaimed} /${MAX_PARKING_SPOTS} Spots`;
+      document.getElementById('spots-remaining-count').textContent = `${spotsRemaining} spots left`;
+
+      const parkingSlotPill = document.getElementById('parking-slot-pill');
+      const parkingStatusDesc = document.getElementById('parking-status-desc');
+
+      if (carsClaimed >= MAX_PARKING_SPOTS) {
+        meterBar.className = "h-full rounded-full bg-rose-600 transition-all duration-700";
+        parkingSlotPill.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping"></span><span>🚨 Driveway Full! Bolt or Carpool Only</span>`;
+        parkingSlotPill.className = "text-[11px] font-bold text-rose-400 bg-rose-950/40 border border-rose-800 px-2.5 py-0.5 rounded-full flex items-center gap-1.5";
+        parkingStatusDesc.textContent = "Driveway at maximum capacity!";
+      } else if (spotsRemaining <= 2) {
+        meterBar.className = "h-full rounded-full bg-amber-500 transition-all duration-700";
+        parkingSlotPill.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-night-gold animate-pulse"></span><span>⚡ Only ${spotsRemaining} spots left!</span>`;
+        parkingSlotPill.className = "text-[11px] font-bold text-night-gold bg-night-gold/15 border border-night-gold/30 px-2.5 py-0.5 rounded-full flex items-center gap-1.5";
+        parkingStatusDesc.textContent = "Almost full, Bolt or carpooling encouraged";
+      } else {
+        meterBar.className = "h-full rounded-full bg-gradient-to-r from-night-emerald via-night-gold to-rose-500 transition-all duration-700";
+        parkingSlotPill.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-night-emerald"></span><span>🟢 ${spotsRemaining} spots available</span>`;
+        parkingSlotPill.className = "text-[11px] font-bold text-night-emerald bg-night-emerald/10 border border-night-emerald/30 px-2.5 py-0.5 rounded-full flex items-center gap-1.5";
+        parkingStatusDesc.textContent = "Driveway & curbside space open";
+      }
+
+      renderRoster();
+    }
+
+    function setRosterFilter(filter) {
+      currentFilter = filter;
+      ['all', 'going', 'items'].forEach(tab => {
+        const btn = document.getElementById(`tab-${tab}`);
+        if (tab === filter) {
+          btn.className = "px-2.5 py-1 rounded-lg font-bold bg-night-emerald text-night-base transition-all";
+        } else {
+          btn.className = "px-2.5 py-1 rounded-lg font-semibold text-slate-400 hover:text-white transition-all";
+        }
+      });
+      renderRoster();
+    }
+
+    function renderRoster() {
+      const container = document.getElementById('attendee-list');
+     
+      let filtered = [...rsvpList];
+      if (currentFilter === 'going') {
+        filtered = filtered.filter(r => r.status === 'going' || r.status === 'late');
+      } else if (currentFilter === 'items') {
+        filtered = filtered.filter(r => r.items && r.items.length > 0);
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-10 text-slate-500 text-xs">
+            No guests found for this filter.
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      filtered.forEach(guest => {
+        let statusBadge = '';
+        if (guest.status === 'going') {
+          statusBadge = `<span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-800"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>🎯 In</span>`;
+        } else if (guest.status === 'late') {
+          statusBadge = `<span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-950/80 text-amber-300 border border-amber-800"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>⏳ 50/50</span>`;
+        } else {
+          statusBadge = `<span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-900 text-slate-400 border border-slate-700"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>❌ Out</span>`;
+        }
+
+        let transportTag = '';
+        if (guest.parking === 'driving_spot') {
+          transportTag = `<span class="text-[10px] text-night-gold bg-night-gold/10 border border-night-gold/30 px-1.5 py-0.5 rounded font-medium">🚗 Spot Claimed</span>`;
+        } else if (guest.parking === 'carpool') {
+          transportTag = `<span class="text-[10px] text-purple-300 bg-purple-950/60 border border-purple-800/60 px-1.5 py-0.5 rounded font-medium">👥 Carpooling</span>`;
+        } else {
+          transportTag = `<span class="text-[10px] text-emerald-300 bg-emerald-950/60 border border-emerald-800/60 px-1.5 py-0.5 rounded font-medium">🚕 Bolt / Dropoff</span>`;
+        }
+
+        let vibeTag = guest.vibe ? `<span class="text-[10px] text-slate-300 bg-night-input border border-night-border px-1.5 py-0.5 rounded">${guest.vibe}</span>` : '';
+        let deckTag = guest.deckVote === 'Yes' ? `<span class="text-[10px] text-night-gold bg-night-gold/10 border border-night-gold/30 px-1.5 py-0.5 rounded font-semibold">📊 Deck: Yes</span>` : '';
+
+        const allItems = [...(guest.items || [])];
+
+        let itemsTags = '';
+        if (allItems.length > 0) {
+          itemsTags = `
+            <div class="flex flex-wrap gap-1 mt-1.5">
+              ${allItems.map(it => `
+                <span class="inline-block text-[11px] bg-night-input text-slate-300 border border-night-border px-2 py-0.5 rounded-md">
+                  ${escapeHtml(it)}
+                </span>
+              `).join('')}
+            </div>
+          `;
+        }
+
+        let notesHtml = '';
+        if (guest.notes && guest.notes.trim()) {
+          notesHtml = `
+            <p class="mt-1 text-xs text-slate-400 italic bg-night-input/50 p-2 rounded-lg border border-night-border/50">
+              💬 "${escapeHtml(guest.notes)}"
+            </p>
+          `;
+        }
+
+        html += `
+          <div class="pt-2 pb-2">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="font-bold text-sm text-white">${escapeHtml(guest.name)}</span>
+                  ${statusBadge}${transportTag}
+                  ${vibeTag}${deckTag}
+                </div>
+                ${itemsTags}${notesHtml}
+              </div>
+              <span class="text-[10px] text-slate-500 whitespace-nowrap">${guest.timestamp || 'Just now'}</span>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    async function handleFormSubmit(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      const form = event.target;
+
+      const guestName = form.guestName.value.trim();
+      const attendance = form.attendance.value;
+      const drinkingVibe = form.drinkingVibe.value;
+      const parkingOption = form.parkingOption.value;
+      const guestNotes = form.guestNotes.value.trim();
+      const presentationDeckVote = form.presentationDeckVote ? form.presentationDeckVote.value : 'No';
+
+      const checkedItems = Array.from(form.querySelectorAll('input[name="items"]:checked')).map(cb => cb.value);
+
+      const foodBites = form.foodBites ? form.foodBites.value.trim() : '';
+      if (foodBites) {
+        checkedItems.push(`Bites: ${foodBites}`);
+      }
+
+      const otherGames = form.otherGames ? form.otherGames.value.trim() : '';
+      if (otherGames) {
+        checkedItems.push(`Game: ${otherGames}`);
+      }
+
+      if (!guestName) {
+        showToast("Please enter your name!", "error");
+        return false;
+      }
+
+      const currentCars = rsvpList.filter(r => r.status !== 'ghosting' && r.parking === 'driving_spot').length;
+      if (parkingOption === 'driving_spot' && currentCars >= MAX_PARKING_SPOTS && attendance !== 'ghosting') {
+        showToast("⚠️ Driveway is full! You can still roll through via Bolt or Carpool.", "warning");
+      }
+
+      const existingIdx = rsvpList.findIndex(r => r.name.toLowerCase() === guestName.toLowerCase());
+
+      // FORMAT EXACTLY FOR DATABASE (deck_vote instead of deckVote, no timestamp)
+      const dbEntry = {
+        id: existingIdx >= 0 ? rsvpList[existingIdx].id : 'ad-' + Date.now(),
+        name: guestName,
+        status: attendance,
+        vibe: drinkingVibe,
+        parking: parkingOption,
+        items: checkedItems,
+        deck_vote: presentationDeckVote, 
+        notes: guestNotes
+      };
+
+      // 1. SAVE TO CLOUD DATABASE FIRST
+      if (!useLocalStorage && supabaseClient) {
+        const { error } = await supabaseClient.from('rsvps').upsert(dbEntry, { onConflict: 'id' });
+        
+        if (error) {
+          console.error("Database Save Error:", error);
+          alert("Database Error: Could not save RSVP. Please try again.");
+          return false;
+        }
+      }
+
+      // 2. TRIGGER OBVIOUS SUCCESS POPUP ALERT
+      if (existingIdx >= 0) {
+        alert(`Your RSVP has been successfully updated, ${guestName}! 🎯`);
+      } else {
+        alert(`Survey says: You're locked in, ${guestName}! See you there! 🎉`);
+      }
+
+      triggerConfetti();
+      form.reset();
+
+      // Reset default selections
+      setTimeout(() => {
+        document.querySelector('input[name="attendance"][value="going"]').checked = true;
+        document.querySelector('input[name="drinkingVibe"][value="Heavy Drinking"]').checked = true;
+        document.querySelector('input[name="parkingOption"][value="driving_spot"]').checked = true;
+        if (document.querySelector('input[name="presentationDeckVote"][value="Yes"]')) {
+          document.querySelector('input[name="presentationDeckVote"][value="Yes"]').checked = true;
+        }
+        
+        // 3. FETCH FRESH DATA TO UPDATE SCREEN
+        loadRsvps();
+      }, 100);
+
+      return false;
+    }
+
+    function triggerConfetti() {
+      try {
+        confetti({
+          particleCount: 80,
+          spread: 75,
+          origin: { y: 0.6 },
+          colors: ['#10B981', '#A855F7', '#FACC15', '#FFFFFF']
+        });
+      } catch (e) {}
+    }
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+     
+      let borderClass = 'border-night-emerald/50 bg-night-card text-white';
+      let icon = '🎯';
+      if (type === 'warning') {
+        borderClass = 'border-night-gold/50 bg-night-card text-amber-200';
+        icon = '⚠️';
+      } else if (type === 'error') {
+        borderClass = 'border-rose-500/50 bg-night-card text-rose-200';
+        icon = '❌';
+      }
+
+      toast.className = `flex items-center gap-3 px-4 py-3 rounded-2xl border shadow-2xl backdrop-blur-md text-xs sm:text-sm font-semibold pointer-events-auto transform translate-y-2 opacity-0 transition-all duration-300 ${borderClass}`;
+      toast.innerHTML = `<span>${icon}</span> <span>${escapeHtml(message)}</span>`;
+
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-x-4');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    function copyHostSummary() {
+      const confirmed = rsvpList.filter(r => r.status === 'going' || r.status === 'late');
+      const drivers = rsvpList.filter(r => r.status !== 'ghosting' && r.parking === 'driving_spot');
+      const deckVotesYes = rsvpList.filter(r => r.status !== 'ghosting' && r.deckVote === 'Yes').length;
+
+      let summary = `🎲 THE NIGHT SHIFT: NOELLELACY'S GAME NIGHT PT. 2 (SURVEY ROLL CALL)\n`;
+      summary += `Confirmed Squad: ${confirmed.length} players\n`;
+      summary += `Driveway Spots Claimed (${drivers.length}/${MAX_PARKING_SPOTS}): ${drivers.map(d => d.name).join(', ') || 'None'}\n`;
+      summary += `Controversial Deck Vote: ${deckVotesYes} Yes / ${confirmed.length - deckVotesYes} No\n\n`;
+
+      summary += `👥 GUEST LIST:\n`;
+      rsvpList.forEach(r => {
+        const status = r.status === 'going' ? '🎯 In' : r.status === 'late' ? '⏳ Maybe' : '❌ Out';
+        const parking = r.parking === 'driving_spot' ? '🚗 Spot' : r.parking === 'carpool' ? '👥 Carpool' : '🚕 Bolt';
+        const items = r.items && r.items.length ? r.items.join(', ') : 'None';
+        summary += `${status} ${r.name} | ${parking} | ${items}\n`;
+        if (r.notes) summary += `   💬 ${r.notes}\n`;
+      });
+
+      navigator.clipboard.writeText(summary);
+      showToast("Summary copied to clipboard! 📋");
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+      if (settings.title) {
+        document.getElementById('event-title-display').textContent = settings.title;
+      }
+      if (settings.datetime) {
+        const datetimeElements = document.querySelectorAll('.event-datetime');
+        datetimeElements.forEach(el => el.textContent = settings.datetime);
+      }
+      if (settings.location) {
+        const locationElements = document.querySelectorAll('.event-location');
+        locationElements.forEach(el => el.textContent = settings.location);
+      }
+      if (settings.parking) {
+        document.getElementById('max-parking-display').textContent = `${settings.parking} spots`;
+      }
+
+      if (window.lucide) lucide.createIcons();
+      loadRsvps();
+      
+      if (supabaseClient) {
+        supabaseClient
+          .channel('public:rsvps')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'rsvps' }, () => {
+            loadRsvps(); 
+          })
+          .subscribe();
+      }
+    });
+  </script>
+</body>
+</html>
