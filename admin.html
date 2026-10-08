@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - THE NIGHT SHIFT</title>
+  <title>ADMIN // THE NIGHT SHIFT Dashboard</title>
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts & Lucide Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@800;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
@@ -22,14 +23,17 @@
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
           },
           colors: {
-            night: {
-              base: '#040D0A',
-              card: '#0B1C15',
-              input: '#10261D',
-              border: '#1A3D30',
-              emerald: '#10B981',
-              purple: '#A855F7',
-              gold: '#FACC15',
+            lego: {
+              yellow: '#FFD700',
+              yellowDark: '#D4AF37',
+              red: '#E51421',
+              redDark: '#A60E18',
+              blue: '#0055BF',
+              blueDark: '#003882',
+              green: '#28C840',
+              greenDark: '#1A872A',
+              plate: '#E5BA00',
+              black: '#121212'
             }
           }
         }
@@ -38,260 +42,306 @@
   </script>
 
   <style>
-    .mesh-ambient {
-      background:
-        radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.18) 0%, transparent 40%),
-        radial-gradient(circle at 85% 25%, rgba(168, 85, 247, 0.2) 0%, transparent 45%),
-        radial-gradient(circle at 50% 85%, rgba(250, 204, 21, 0.08) 0%, transparent 50%);
+    .baseplate-bg-admin {
+      background-color: #0055BF;
+      background-image: 
+        radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.2) 8%, rgba(0, 56, 130, 0.6) 18%, transparent 22%),
+        radial-gradient(circle at 50% 50%, #00459E 20%, transparent 24%);
+      background-size: 28px 28px;
     }
+
+    .brick-card-3d {
+      background: #FFFFFF;
+      border: 3px solid #121212;
+      border-radius: 1.5rem;
+      box-shadow: 
+        inset 0 2px 0 rgba(255,255,255,0.9),
+        0 8px 0 #121212,
+        0 14px 18px rgba(0,0,0,0.18);
+    }
+
+    .btn-3d {
+      border: 3px solid #121212;
+      border-radius: 0.75rem;
+      position: relative;
+      transition: all 0.08s ease-in-out;
+      user-select: none;
+    }
+    .btn-3d-green {
+      background: linear-gradient(180deg, #32DE4D 0%, #28C840 100%);
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.6), 0 5px 0 #1A872A, 0 8px 0 #121212;
+    }
+    .btn-3d-green:active {
+      transform: translateY(5px);
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.6), 0 0 0 #1A872A, 0 3px 0 #121212;
+    }
+    
+    .btn-3d-red {
+      background: linear-gradient(180deg, #FF3344 0%, #E51421 100%);
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.6), 0 5px 0 #A60E18, 0 8px 0 #121212;
+    }
+    .btn-3d-red:active {
+      transform: translateY(5px);
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.6), 0 0 0 #A60E18, 0 3px 0 #121212;
+    }
+
+    .btn-3d-blue {
+      background: linear-gradient(180deg, #3B82F6 0%, #0055BF 100%);
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.6), 0 5px 0 #003882, 0 8px 0 #121212;
+    }
+    .btn-3d-blue:active {
+      transform: translateY(5px);
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.6), 0 0 0 #003882, 0 3px 0 #121212;
+    }
+
+    .btn-3d-white {
+      background: #FFFFFF;
+      box-shadow: inset 0 2px 0 rgba(255,255,255,1), 0 4px 0 #D1D5DB, 0 7px 0 #121212;
+    }
+    .btn-3d-white:active {
+      transform: translateY(4px);
+      box-shadow: inset 0 2px 0 rgba(255,255,255,1), 0 0 0 #D1D5DB, 0 3px 0 #121212;
+    }
+
+    .brick-input-3d {
+      background-color: #F8FAFC;
+      border: 3px solid #121212;
+      border-radius: 0.75rem;
+      box-shadow: inset 0 3px 4px rgba(0,0,0,0.12), 0 2px 0 rgba(255,255,255,0.8);
+      transition: all 0.15s;
+    }
+    .brick-input-3d:focus {
+      outline: none;
+      background-color: #FFFFFF;
+      border-color: #0055BF;
+      box-shadow: inset 0 2px 2px rgba(0,0,0,0.06), 0 0 0 3px #93C5FD;
+    }
+
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #0055BF; border-left: 2px solid #121212; }
+    ::-webkit-scrollbar-thumb { background: #FFD700; border: 2px solid #121212; border-radius: 999px; }
   </style>
 </head>
 
-<body class="bg-night-base text-slate-100 font-sans min-h-screen relative overflow-x-hidden">
-  <div class="fixed inset-0 pointer-events-none z-0 mesh-ambient"></div>
+<body class="baseplate-bg-admin text-lego-black font-sans min-h-screen relative overflow-x-hidden pb-16 selection:bg-lego-yellow selection:text-lego-black">
 
-  <!-- Login Screen -->
-  <div id="login-screen" class="relative z-10 min-h-screen flex items-center justify-center p-4">
-    <div class="bg-night-card/90 border border-night-border rounded-3xl p-8 w-full max-w-md backdrop-blur-xl shadow-2xl">
-      <div class="text-center mb-8">
-        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-night-emerald via-night-purple to-night-gold flex items-center justify-center text-3xl mx-auto mb-4 shadow-lg shadow-night-emerald/20">
-          👩🏾‍🦲
+  <!-- PASSWORD GATE SCREEN -->
+  <div id="auth-screen" class="fixed inset-0 z-50 bg-[#0055BF] flex items-center justify-center px-4">
+    <div class="brick-card-3d p-8 max-w-md w-full text-center">
+      <div class="mb-6">
+        <div class="w-16 h-16 rounded-2xl bg-lego-yellow border-3 border-lego-black shadow-[0_5px_0_#121212] flex items-center justify-center text-3xl mx-auto mb-4">
+          🔒
         </div>
-        <h1 class="text-2xl font-bold font-display text-white mb-2">Admin Access</h1>
-        <p class="text-sm text-slate-400">Enter your password to access the dashboard</p>
+        <h1 class="text-3xl font-black font-display text-lego-black uppercase tracking-tight">ADMIN GATE</h1>
+        <p class="text-xs font-bold text-gray-500 mt-1 uppercase tracking-wider">Game Master Only</p>
       </div>
 
-      <form onsubmit="handleLogin(event)" class="space-y-4">
+      <form onsubmit="handleLogin(event)" class="space-y-5">
         <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Password</label>
           <input
             type="password"
             id="admin-password"
             required
-            placeholder="Enter admin password"
-            class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-night-emerald transition-all font-medium"
+            placeholder="Enter admin password..."
+            class="w-full brick-input-3d px-4 py-3.5 text-base font-bold text-center"
           >
         </div>
         <button
           type="submit"
-          class="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-night-emerald to-night-purple text-white font-display font-bold shadow-xl shadow-night-emerald/25 hover:opacity-95 transition-all"
+          class="w-full py-4 px-4 btn-3d btn-3d-green text-white font-black font-display text-lg uppercase tracking-wider cursor-pointer"
         >
-          Access Dashboard
+          Unlock Dashboard
         </button>
       </form>
-
-      <p id="login-error" class="text-center text-red-400 text-sm mt-4 hidden">Incorrect password</p>
+      <div class="text-center mt-6">
+        <a href="index.html" class="text-xs font-black text-gray-400 hover:text-lego-black transition-colors uppercase border-b-2 border-transparent hover:border-lego-black">
+          ← Back to RSVP Page
+        </a>
+      </div>
     </div>
   </div>
 
-  <!-- Admin Dashboard (Hidden by default) -->
-  <div id="admin-dashboard" class="relative z-10 hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-      
-      <!-- Header -->
-      <header class="flex items-center justify-between pb-6 border-b border-night-border/60 mb-8">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-night-emerald via-night-purple to-night-gold flex items-center justify-center text-xl shadow-lg shadow-night-emerald/20">
-            👩🏾‍🦲
-          </div>
+  <!-- EDIT GUEST MODAL -->
+  <div id="edit-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="brick-card-3d p-6 sm:p-8 max-w-lg w-full bg-white relative my-8 max-h-[90vh] overflow-y-auto text-left">
+      <div class="flex items-center justify-between pb-4 border-b-3 border-lego-black mb-6">
+        <h3 class="text-2xl font-black font-display uppercase text-lego-black">Edit RSVP Record</h3>
+        <button onclick="closeEditModal()" class="w-8 h-8 rounded-lg bg-gray-200 border-2 border-lego-black font-black flex items-center justify-center hover:bg-red-500 hover:text-white transition-colors">✕</button>
+      </div>
+
+      <form id="edit-form" onsubmit="saveEditedRsvp(event)" class="space-y-4 text-xs font-bold">
+        <input type="hidden" id="edit-id">
+        
+        <div>
+          <label class="block uppercase tracking-wider mb-1 text-gray-600">Guest Name</label>
+          <input type="text" id="edit-name" required class="w-full brick-input-3d p-3 text-sm font-bold text-lego-black">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
           <div>
-            <div class="text-[11px] font-extrabold uppercase tracking-widest text-night-emerald">ADMIN PANEL</div>
-            <h2 class="text-lg font-bold font-display text-white">THE NIGHT SHIFT Dashboard</h2>
+            <label class="block uppercase tracking-wider mb-1 text-gray-600">Status</label>
+            <select id="edit-status" class="w-full brick-input-3d p-3 text-sm font-bold text-lego-black bg-white">
+              <option value="going">🎯 In (Going)</option>
+              <option value="late">⏳ Maybe</option>
+              <option value="ghosting">❌ Out</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block uppercase tracking-wider mb-1 text-gray-600">Parking</label>
+            <select id="edit-parking" class="w-full brick-input-3d p-3 text-sm font-bold text-lego-black bg-white">
+              <option value="driving_spot">🚗 Driveway Spot</option>
+              <option value="carpool">👥 Carpooling</option>
+              <option value="uber_bolt">🚕 Bolt / Dropoff</option>
+            </select>
           </div>
         </div>
-        <button onclick="logout()" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-night-card border border-night-border text-slate-300 hover:text-white hover:bg-night-border/40 transition-all">
-          <i data-lucide="log-out" class="w-4 h-4"></i>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block uppercase tracking-wider mb-1 text-gray-600">Drinking Vibe</label>
+            <input type="text" id="edit-vibe" class="w-full brick-input-3d p-3 text-sm font-bold text-lego-black">
+          </div>
+
+          <div>
+            <label class="block uppercase tracking-wider mb-1 text-gray-600">Deck Vote</label>
+            <select id="edit-deck" class="w-full brick-input-3d p-3 text-sm font-bold text-lego-black bg-white">
+              <option value="Yes">🔥 Yes</option>
+              <option value="No">❌ No</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block uppercase tracking-wider mb-1 text-gray-600">Items Brought (comma separated)</label>
+          <input type="text" id="edit-items" class="w-full brick-input-3d p-3 text-sm font-bold text-lego-black" placeholder="e.g. Wine, Chasers, Suya">
+        </div>
+
+        <div>
+          <label class="block uppercase tracking-wider mb-1 text-gray-600">Notes / Questions</label>
+          <textarea id="edit-notes" rows="2" class="w-full brick-input-3d p-3 text-sm font-bold text-lego-black"></textarea>
+        </div>
+
+        <div class="pt-4 flex gap-3">
+          <button type="submit" class="flex-1 py-3.5 btn-3d btn-3d-green text-white font-black uppercase tracking-wider text-sm">Save Changes</button>
+          <button type="button" onclick="closeEditModal()" class="px-6 py-3.5 btn-3d btn-3d-white text-lego-black font-black uppercase tracking-wider text-sm">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAIN DASHBOARD CONTENT (Hidden until logged in) -->
+  <div id="dashboard-content" class="hidden relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-8">
+   
+    <!-- Top Header -->
+    <header class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b-4 border-white/20 gap-4 mb-8">
+      <div class="flex items-center gap-3.5">
+        <div class="w-14 h-14 rounded-2xl bg-lego-yellow border-3 border-lego-black shadow-[0_5px_0_#121212] flex items-center justify-center text-3xl">
+          🛠️
+        </div>
+        <div>
+          <div class="text-[11px] font-black uppercase tracking-widest text-lego-yellow flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 border-2 border-lego-black rounded-full bg-lego-green animate-pulse shadow-[0_1px_0_#121212]"></span>
+            Noellelacy's Game Night Pt. 2
+          </div>
+          <h2 class="text-2xl font-black font-display text-white uppercase tracking-tight drop-shadow-md">GAME ADMIN</h2>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 flex-wrap">
+        <a href="index.html" target="_blank" class="px-4 py-2.5 btn-3d btn-3d-white text-xs font-black text-lego-black flex items-center gap-2 uppercase">
+          <i data-lucide="external-link" class="w-4 h-4 stroke-[3]"></i>
+          <span>Live Page</span>
+        </a>
+        <button onclick="handleLogout()" class="px-4 py-2.5 btn-3d btn-3d-red text-xs font-black text-white uppercase">
           Logout
         </button>
-      </header>
+      </div>
+    </header>
 
-      <!-- Tabs -->
-      <div class="flex gap-2 mb-8 bg-night-input p-1 rounded-xl border border-night-border w-fit">
-        <button onclick="switchTab('rsvps')" id="tab-rsvps" class="px-4 py-2 rounded-lg font-bold bg-night-emerald text-night-base transition-all">RSVPs</button>
-        <button onclick="switchTab('settings')" id="tab-settings" class="px-4 py-2 rounded-lg font-semibold text-slate-400 hover:text-white transition-all">Settings</button>
-        <button onclick="switchTab('export')" id="tab-export" class="px-4 py-2 rounded-lg font-semibold text-slate-400 hover:text-white transition-all">Export</button>
+    <!-- Quick Stats Grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+      <div class="brick-card-3d p-5 text-center">
+        <div class="text-4xl font-black font-display text-lego-black mb-1" id="stat-total">0</div>
+        <div class="text-[11px] text-gray-500 font-black uppercase tracking-widest">Total RSVPs</div>
       </div>
 
-      <!-- RSVPs Tab -->
-      <div id="panel-rsvps" class="space-y-6">
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="bg-night-card/90 border border-night-border p-4 rounded-2xl">
-            <div class="text-3xl font-black font-display text-night-emerald" id="admin-total">0</div>
-            <div class="text-xs text-slate-400">Total RSVPs</div>
-          </div>
-          <div class="bg-night-card/90 border border-night-border p-4 rounded-2xl">
-            <div class="text-3xl font-black font-display text-green-400" id="admin-attending">0</div>
-            <div class="text-xs text-slate-400">Attending</div>
-          </div>
-          <div class="bg-night-card/90 border border-night-border p-4 rounded-2xl">
-            <div class="text-3xl font-black font-display text-night-gold" id="admin-parking">0</div>
-            <div class="text-xs text-slate-400">Parking Spots</div>
-          </div>
-          <div class="bg-night-card/90 border border-night-border p-4 rounded-2xl">
-            <div class="text-3xl font-black font-display text-night-purple" id="admin-items">0</div>
-            <div class="text-xs text-slate-400">Items</div>
-          </div>
-        </div>
-
-        <!-- RSVP Table -->
-        <div class="bg-night-card/90 border border-night-border rounded-2xl overflow-hidden">
-          <div class="p-4 border-b border-night-border flex items-center justify-between">
-            <h3 class="font-bold text-white flex items-center gap-2">
-              All RSVPs
-              <span id="live-indicator" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse hidden" title="Live Sync Active"></span>
-            </h3>
-            <button onclick="clearAllRsvps()" class="text-xs text-red-400 hover:text-red-300 font-semibold">Clear All</button>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full">
-              <thead class="bg-night-input">
-                <tr>
-                  <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Name</th>
-                  <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Status</th>
-                  <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Vibe</th>
-                  <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Parking</th>
-                  <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Items</th>
-                  <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Deck Vote</th>
-                  <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Notes</th>
-                  <th class="px-4 py-3 text-left text-xs font-bold text-slate-400 uppercase">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="admin-rsvp-table">
-                <!-- Populated by JS -->
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <div class="brick-card-3d p-5 text-center border-b-8 border-b-lego-green">
+        <div class="text-4xl font-black font-display text-lego-green mb-1" id="stat-attending">0</div>
+        <div class="text-[11px] text-gray-500 font-black uppercase tracking-widest">Attending</div>
       </div>
 
-      <!-- Settings Tab -->
-      <div id="panel-settings" class="hidden space-y-6">
-        <div class="bg-night-card/90 border border-night-border rounded-2xl p-6">
-          <h3 class="font-bold text-white mb-6">Event Configuration</h3>
-          
-          <div class="space-y-4">
-            <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Event Title</label>
-              <input
-                type="text"
-                id="setting-title"
-                class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-night-emerald transition-all"
-                value="THE NIGHT SHIFT"
-              >
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Max Parking Spots</label>
-              <input
-                type="number"
-                id="setting-parking"
-                class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-night-emerald transition-all"
-                value="8"
-              >
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Event Date/Time</label>
-              <input
-                type="text"
-                id="setting-datetime"
-                class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-night-emerald transition-all"
-                value="Friday Night • 6:00 PM - 10:00 PM"
-              >
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Location</label>
-              <input
-                type="text"
-                id="setting-location"
-                class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-night-emerald transition-all"
-                value="NOELLELACY'S CABAN (After you RSVP)"
-              >
-            </div>
-
-            <button onclick="saveSettings()" class="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-night-emerald to-night-purple text-white font-display font-bold shadow-xl shadow-night-emerald/25 hover:opacity-95 transition-all">
-              Save Settings
-            </button>
-          </div>
-        </div>
+      <div class="brick-card-3d p-5 text-center border-b-8 border-b-lego-yellow">
+        <div class="text-4xl font-black font-display text-lego-yellowDark mb-1" id="stat-parking">0 / 8</div>
+        <div class="text-[11px] text-gray-500 font-black uppercase tracking-widest">Parking Spots</div>
       </div>
 
-      <!-- Export Tab -->
-      <div id="panel-export" class="hidden space-y-6">
-        <div class="bg-night-card/90 border border-night-border rounded-2xl p-6">
-          <h3 class="font-bold text-white mb-6">Export Data</h3>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <button onclick="exportCSV()" class="flex items-center justify-center gap-2 p-4 rounded-xl bg-night-input border border-night-border hover:border-night-emerald transition-all">
-              <i data-lucide="download" class="w-5 h-5 text-night-emerald"></i>
-              <span class="font-semibold">Download CSV</span>
-            </button>
-            
-            <button onclick="exportJSON()" class="flex items-center justify-center gap-2 p-4 rounded-xl bg-night-input border border-night-border hover:border-night-purple transition-all">
-              <i data-lucide="file-json" class="w-5 h-5 text-night-purple"></i>
-              <span class="font-semibold">Download JSON</span>
-            </button>
-
-            <button onclick="copyWhatsAppAdmin()" class="flex items-center justify-center gap-2 p-4 rounded-xl bg-night-input border border-night-border hover:border-night-gold transition-all">
-              <i data-lucide="copy" class="w-5 h-5 text-night-gold"></i>
-              <span class="font-semibold">Copy WhatsApp Summary</span>
-            </button>
-
-            <button onclick="importData()" class="flex items-center justify-center gap-2 p-4 rounded-xl bg-night-input border border-night-border hover:border-rose-500 transition-all">
-              <i data-lucide="upload" class="w-5 h-5 text-rose-400"></i>
-              <span class="font-semibold">Import Data</span>
-            </button>
-          </div>
-
-          <div id="import-area" class="hidden mt-4">
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Import JSON Data</label>
-            <textarea
-              id="import-textarea"
-              rows="6"
-              placeholder="Paste JSON data here..."
-              class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-sm text-slate-100 focus:outline-none focus:border-night-emerald transition-all"
-            ></textarea>
-            <button onclick="processImport()" class="mt-2 py-2 px-4 rounded-xl bg-night-emerald text-white font-semibold hover:opacity-95 transition-all">
-              Process Import
-            </button>
-          </div>
-        </div>
+      <div class="brick-card-3d p-5 text-center border-b-8 border-b-lego-blue">
+        <div class="text-4xl font-black font-display text-lego-blue mb-1" id="stat-items">0</div>
+        <div class="text-[11px] text-gray-500 font-black uppercase tracking-widest">Brought Items</div>
       </div>
-
     </div>
+
+    <!-- Management Controls & Filters -->
+    <div class="brick-card-3d p-6 mb-6">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pb-5 border-b-3 border-lego-black">
+        <div class="flex items-center gap-2 w-full sm:w-auto bg-gray-100 p-1.5 rounded-xl border-3 border-lego-black">
+          <button onclick="setFilter('all')" id="filter-all" class="px-4 py-2 rounded-lg text-xs font-black bg-lego-black text-white shadow-[0_3px_0_#121212] transition-all uppercase tracking-wider">All RSVPs</button>
+          <button onclick="setFilter('going')" id="filter-going" class="px-4 py-2 rounded-lg text-xs font-black text-gray-500 hover:text-lego-black transition-all uppercase tracking-wider">Attending</button>
+          <button onclick="setFilter('items')" id="filter-items" class="px-4 py-2 rounded-lg text-xs font-black text-gray-500 hover:text-lego-black transition-all uppercase tracking-wider">Bringing Items</button>
+        </div>
+
+        <!-- Parking Limit Modifier Box -->
+        <div class="flex items-center gap-2 bg-lego-yellow/30 p-2.5 rounded-xl border-3 border-lego-black">
+          <label for="admin-max-parking" class="text-xs font-black uppercase text-lego-black">Max Parking:</label>
+          <input 
+            type="number" 
+            id="admin-max-parking" 
+            value="8" 
+            min="1" 
+            max="50" 
+            oninput="updateParkingLimit(this.value)"
+            class="w-16 brick-input-3d p-1.5 text-center text-xs font-black bg-white"
+          >
+        </div>
+
+        <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+          <button onclick="exportCSV()" class="px-4 py-2.5 rounded-xl border-3 border-lego-black bg-lego-yellow text-lego-black text-xs font-black uppercase tracking-wider hover:bg-yellow-400 transition-all flex items-center gap-2 shadow-[0_3px_0_#121212] active:translate-y-1 active:shadow-none">
+            <i data-lucide="download" class="w-4 h-4 stroke-[3]"></i>
+            <span>Export CSV</span>
+          </button>
+          <button onclick="clearAllData()" class="px-4 py-2.5 rounded-xl border-3 border-lego-black bg-gray-200 text-lego-red text-xs font-black uppercase tracking-wider hover:bg-red-50 transition-all flex items-center gap-2 shadow-[0_3px_0_#121212] active:translate-y-1 active:shadow-none">
+            <i data-lucide="trash-2" class="w-4 h-4 stroke-[3]"></i>
+            <span>Clear All</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- TABLE CONTAINER -->
+      <div class="overflow-x-auto mt-5">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b-4 border-lego-black text-[11px] uppercase tracking-widest text-lego-black font-black bg-gray-50">
+              <th class="p-4 min-w-[140px] rounded-tl-xl">Name</th>
+              <th class="p-4 min-w-[100px]">Status</th>
+              <th class="p-4 min-w-[120px]">Vibe</th>
+              <th class="p-4 min-w-[130px]">Parking</th>
+              <th class="p-4 min-w-[90px]">Deck Vote</th>
+              <th class="p-4 min-w-[200px]">Notes & Items</th>
+              <th class="p-4 text-right min-w-[140px] rounded-tr-xl">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-table-body" class="divide-y-3 divide-gray-200 text-xs font-bold">
+            <!-- Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 
-  <!-- Edit Modal -->
-  <div id="edit-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-night-card border border-night-border rounded-2xl p-6 w-full max-w-lg">
-      <h3 class="font-bold text-white mb-4">Edit RSVP</h3>
-      <form onsubmit="saveEdit(event)" class="space-y-4">
-        <input type="hidden" id="edit-id">
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Name</label>
-          <input type="text" id="edit-name" class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-sm text-slate-100">
-        </div>
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Status</label>
-          <select id="edit-status" class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-sm text-slate-100">
-            <option value="going">Going</option>
-            <option value="late">Maybe</option>
-            <option value="ghosting">Out</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Notes</label>
-          <textarea id="edit-notes" rows="3" class="w-full bg-night-input border border-night-border rounded-xl px-4 py-3 text-sm text-slate-100"></textarea>
-        </div>
-        <div class="flex gap-2">
-          <button type="submit" class="flex-1 py-2 rounded-xl bg-night-emerald text-white font-semibold hover:opacity-95 transition-all">Save</button>
-          <button type="button" onclick="closeEditModal()" class="flex-1 py-2 rounded-xl bg-night-input text-slate-300 font-semibold hover:text-white transition-all">Cancel</button>
-        </div>
-      </form>
-    </div>
-  </div>
+  <!-- Notification Toast -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
 
   <script>
     // ----------------------------------------------------
@@ -299,81 +349,52 @@
     // ----------------------------------------------------
     const SUPABASE_URL = 'https://dzjaobqsesiuibdcdqpi.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6amFvYnFzZXNpdWliZGNkcXBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzMTc2MDYsImV4cCI6MjEwNjg5MzYwNn0.bTLvB-ejlZScKhwLqpoyUyDszOmmpyANd7F8uMOm_10';
-    
+
     let supabaseClient = null;
     let useLocalStorage = true;
-    let rsvpList = [];
 
-    // Safely initialize Supabase
     if (window.supabase) {
       try {
         supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         useLocalStorage = false;
       } catch (e) {
-        console.error('Supabase init failed, falling back to localStorage:', e);
+        console.error('Supabase init failed, using localStorage:', e);
       }
     }
 
-    const ADMIN_PASSWORD = 'nightshift2024'; // Password to login
     const STORAGE_KEY = 'noellelacy_gamenight_rsvp_list_v2';
+    const SESSION_KEY = 'noellelacy_admin_logged_in';
     const SETTINGS_KEY = 'noellelacy_gamenight_settings';
-    const SESSION_KEY = 'noellelacy_admin_session';
+    
+    let rsvpList = [];
+    let currentFilter = 'all';
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const session = sessionStorage.getItem(SESSION_KEY);
-      if (session === 'authenticated') {
-        showDashboard();
-      }
-      if (window.lucide) {
-        lucide.createIcons();
-      }
-    });
-
-    function handleLogin(event) {
-      event.preventDefault();
-      // Added .trim() to ensure trailing spaces from copy-pasting don't break the password
-      const password = document.getElementById('admin-password').value.trim();
-      
-      if (password === ADMIN_PASSWORD) {
-        sessionStorage.setItem(SESSION_KEY, 'authenticated');
-        showDashboard();
+    function handleLogin(e) {
+      e.preventDefault();
+      const pwd = document.getElementById('admin-password').value;
+      if (pwd === 'nightshift2024') {
+        sessionStorage.setItem(SESSION_KEY, 'true');
+        checkAuth();
       } else {
-        document.getElementById('login-error').classList.remove('hidden');
-        document.getElementById('admin-password').value = '';
+        alert('Incorrect password! Try again.');
       }
     }
 
-    function logout() {
+    function handleLogout() {
       sessionStorage.removeItem(SESSION_KEY);
-      document.getElementById('admin-dashboard').classList.add('hidden');
-      document.getElementById('login-screen').classList.remove('hidden');
-      document.getElementById('admin-password').value = '';
-      document.getElementById('login-error').classList.add('hidden');
+      location.reload();
     }
 
-    function showDashboard() {
-      document.getElementById('login-screen').classList.add('hidden');
-      document.getElementById('admin-dashboard').classList.remove('hidden');
-      loadRsvps();
-      loadSettings();
-      initRealtimeSubscription();
-      if (window.lucide) {
-        lucide.createIcons();
+    function checkAuth() {
+      const isAuthed = sessionStorage.getItem(SESSION_KEY);
+      if (isAuthed === 'true') {
+        document.getElementById('auth-screen').classList.add('hidden');
+        document.getElementById('dashboard-content').classList.remove('hidden');
+        loadAdminData();
       }
     }
 
-    function switchTab(tab) {
-      ['rsvps', 'settings', 'export'].forEach(t => {
-        document.getElementById(`panel-${t}`).classList.add('hidden');
-        document.getElementById(`tab-${t}`).className = 'px-4 py-2 rounded-lg font-semibold text-slate-400 hover:text-white transition-all';
-      });
-      document.getElementById(`panel-${tab}`).classList.remove('hidden');
-      document.getElementById(`tab-${tab}`).className = 'px-4 py-2 rounded-lg font-bold bg-night-emerald text-night-base transition-all';
-    }
-
-    // --- SUPABASE SYNC LOGIC ---
-
-    async function loadRsvps() {
+    async function loadAdminData() {
       if (!useLocalStorage && supabaseClient) {
         try {
           const { data, error } = await supabaseClient
@@ -381,89 +402,161 @@
             .select('*')
             .order('created_at', { ascending: false });
 
-          if (!error && data) {
-            rsvpList = data.map(r => ({
-              id: r.id,
-              name: r.name,
-              status: r.status,
-              vibe: r.vibe,
-              parking: r.parking,
-              items: r.items || [],
-              deckVote: r.deck_vote || r.deckVote || 'No',
-              notes: r.notes || '',
-              timestamp: r.created_at ? new Date(r.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''
-            }));
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(rsvpList)); // Cache locally
-          }
-        } catch (err) {
-          console.error("Supabase load failed", err);
+          if (error) throw error;
+
+          rsvpList = data.map(r => ({
+            id: r.id,
+            name: r.name,
+            status: r.status,
+            vibe: r.vibe,
+            parking: r.parking,
+            items: r.items || [],
+            deckVote: r.deck_vote || 'No',
+            notes: r.notes || '',
+            timestamp: r.created_at ? new Date(r.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just now'
+          }));
+        } catch (e) {
+          console.error('Supabase error, loading local fallback:', e);
+          loadFromStorage();
         }
       } else {
+        loadFromStorage();
+      }
+      updateAdminStats();
+      renderAdminTable();
+    }
+
+    function loadFromStorage() {
+      try {
         const stored = localStorage.getItem(STORAGE_KEY);
         rsvpList = stored ? JSON.parse(stored) : [];
+      } catch (e) {
+        rsvpList = [];
       }
-      updateAdminUI();
     }
 
-    function initRealtimeSubscription() {
-      if (!supabaseClient) return;
-      document.getElementById('live-indicator').classList.remove('hidden'); // Show pulsing green dot
-      supabaseClient
-        .channel('admin-updates')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'rsvps' }, () => {
-          loadRsvps(); // Reload table automatically if new guest registers
-        })
-        .subscribe();
-    }
-
-    function updateAdminUI() {
-      document.getElementById('admin-total').textContent = rsvpList.length;
-      document.getElementById('admin-attending').textContent = rsvpList.filter(r => r.status === 'going' || r.status === 'late').length;
-      document.getElementById('admin-parking').textContent = rsvpList.filter(r => r.status !== 'ghosting' && r.parking === 'driving_spot').length;
-      document.getElementById('admin-items').textContent = rsvpList.reduce((acc, r) => acc + (r.items ? r.items.length : 0), 0);
-
-      const tbody = document.getElementById('admin-rsvp-table');
+    function updateAdminStats() {
+      const total = rsvpList.length;
+      const attending = rsvpList.filter(r => r.status === 'going' || r.status === 'late').length;
+      const cars = rsvpList.filter(r => r.status !== 'ghosting' && r.parking === 'driving_spot').length;
       
-      if (rsvpList.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" class="px-4 py-8 text-center text-slate-500">No RSVPs yet</td></tr>';
+      // Read dynamic max parking limit from storage (default to 8 if not set)
+      const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+      const maxParking = settings.parking || 8;
+
+      let itemsCount = 0;
+      rsvpList.forEach(r => {
+        if (r.status !== 'ghosting' && r.items) itemsCount += r.items.length;
+      });
+
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-attending').textContent = attending;
+      document.getElementById('stat-parking').textContent = `${cars} / ${maxParking}`;
+      document.getElementById('stat-items').textContent = itemsCount;
+    }
+
+    function updateParkingLimit(newLimit) {
+      const parsed = parseInt(newLimit);
+      if (isNaN(parsed) || parsed < 1) return;
+      
+      const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+      settings.parking = parsed;
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+      
+      updateAdminStats();
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      ['all', 'going', 'items'].forEach(f => {
+        const btn = document.getElementById(`filter-${f}`);
+        if (f === filter) {
+          btn.className = "px-4 py-2 rounded-lg text-xs font-black bg-lego-black text-white shadow-[0_3px_0_#121212] transition-all uppercase tracking-wider";
+        } else {
+          btn.className = "px-4 py-2 rounded-lg text-xs font-black text-gray-500 hover:text-lego-black transition-all uppercase tracking-wider shadow-none";
+        }
+      });
+      renderAdminTable();
+    }
+
+    function renderAdminTable() {
+      const tbody = document.getElementById('admin-table-body');
+      
+      let filtered = [...rsvpList];
+      if (currentFilter === 'going') {
+        filtered = filtered.filter(r => r.status === 'going' || r.status === 'late');
+      } else if (currentFilter === 'items') {
+        filtered = filtered.filter(r => r.items && r.items.length > 0);
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="text-center py-16 text-gray-400 font-black uppercase tracking-widest border-b-3 border-gray-200">
+              No RSVPs found.
+            </td>
+          </tr>
+        `;
         return;
       }
 
-      tbody.innerHTML = rsvpList.map(r => `
-        <tr class="border-b border-night-border/50 hover:bg-night-input/30">
-          <td class="px-4 py-3 text-sm font-medium text-white">${escapeHtml(r.name)}</td>
-          <td class="px-4 py-3 text-sm">
-            <span class="px-2 py-1 rounded-full text-xs font-semibold ${
-              r.status === 'going' ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800' :
-              r.status === 'late' ? 'bg-amber-950/80 text-amber-300 border border-amber-800' :
-              'bg-slate-900 text-slate-400 border border-slate-700'
-            }">
-              ${r.status === 'going' ? '🎯 In' : r.status === 'late' ? '⏳ Maybe' : '❌ Out'}
-            </span>
-          </td>
-          <td class="px-4 py-3 text-sm text-slate-300">${escapeHtml(r.vibe || '-')}</td>
-          <td class="px-4 py-3 text-sm text-slate-300">${r.parking === 'driving_spot' ? '🚗 Spot' : r.parking === 'carpool' ? '👥 Carpool' : '🚕 Bolt'}</td>
-          <td class="px-4 py-3 text-sm text-slate-300 max-w-xs truncate">${r.items ? r.items.join(', ') : '-'}</td>
-          <td class="px-4 py-3 text-sm text-slate-300">${r.deckVote === 'Yes' ? '🔥 Yes' : '❌ No'}</td>
-          <td class="px-4 py-3 text-sm text-slate-400 italic max-w-xs truncate">${escapeHtml(r.notes || '-')}</td>
-          <td class="px-4 py-3 text-sm">
-            <div class="flex gap-2">
-              <button onclick="editRsvp('${r.id}')" class="text-night-emerald hover:text-emerald-300">Edit</button>
-              <button onclick="deleteRsvp('${r.id}')" class="text-red-400 hover:text-red-300">Delete</button>
-            </div>
-          </td>
-        </tr>
-      `).join('');
+      let html = '';
+      filtered.forEach(guest => {
+        let statusBadge = '';
+        if (guest.status === 'going') {
+          statusBadge = `<span class="inline-block px-2.5 py-1 rounded-lg bg-lego-green text-white border-2 border-lego-black text-[10px] font-black shadow-[0_2px_0_#121212]">🎯 In</span>`;
+        } else if (guest.status === 'late') {
+          statusBadge = `<span class="inline-block px-2.5 py-1 rounded-lg bg-lego-yellow text-lego-black border-2 border-lego-black text-[10px] font-black shadow-[0_2px_0_#121212]">⏳ Maybe</span>`;
+        } else {
+          statusBadge = `<span class="inline-block px-2.5 py-1 rounded-lg bg-gray-200 text-gray-600 border-2 border-lego-black text-[10px] font-black shadow-[0_2px_0_#121212]">❌ Out</span>`;
+        }
+
+        let parkingText = guest.parking === 'driving_spot' ? '🚗 Driveway Spot' : guest.parking === 'carpool' ? '👥 Carpooling' : '🚕 Bolt / Dropoff';
+        let deckFormatted = guest.deckVote === 'Yes' ? '🔥 Yes' : '❌ No';
+
+        let itemsList = guest.items && guest.items.length ? guest.items.join(', ') : '';
+        let notesText = guest.notes ? `💬 ${guest.notes}` : '';
+        let combinedInfo = [itemsList, notesText].filter(Boolean).join(' | ') || '-';
+
+        html += `
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="p-4 font-black text-lego-black whitespace-normal break-words text-sm uppercase">${escapeHtml(guest.name)}</td>
+            <td class="p-4 whitespace-normal break-words">${statusBadge}</td>
+            <td class="p-4 text-gray-600 whitespace-normal break-words">${escapeHtml(guest.vibe || '-')}</td>
+            <td class="p-4 text-gray-600 whitespace-normal break-words">${parkingText}</td>
+            <td class="p-4 text-gray-600 whitespace-normal break-words">${deckFormatted}</td>
+            <td class="p-4 text-gray-600 whitespace-normal break-words font-medium">${escapeHtml(combinedInfo)}</td>
+            <td class="p-4 text-right whitespace-nowrap">
+              <div class="flex items-center justify-end gap-2">
+                <button onclick="openEditModal('${guest.id}')" class="btn-3d btn-3d-blue px-3 py-2 text-white text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
+                  <i data-lucide="edit-3" class="w-3.5 h-3.5 stroke-[3]"></i> Edit
+                </button>
+                <button onclick="deleteRsvp('${guest.id}')" class="btn-3d btn-3d-red px-3 py-2 text-white text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5 stroke-[3]"></i> Del
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = html;
+      if (window.lucide) lucide.createIcons();
     }
 
-    function editRsvp(id) {
-      const rsvp = rsvpList.find(r => r.id === id);
-      if (!rsvp) return;
+    function openEditModal(id) {
+      const guest = rsvpList.find(r => r.id === id);
+      if (!guest) return;
 
-      document.getElementById('edit-id').value = id;
-      document.getElementById('edit-name').value = rsvp.name;
-      document.getElementById('edit-status').value = rsvp.status;
-      document.getElementById('edit-notes').value = rsvp.notes || '';
+      document.getElementById('edit-id').value = guest.id;
+      document.getElementById('edit-name').value = guest.name || '';
+      document.getElementById('edit-status').value = guest.status || 'going';
+      document.getElementById('edit-parking').value = guest.parking || 'driving_spot';
+      document.getElementById('edit-vibe').value = guest.vibe || '';
+      document.getElementById('edit-deck').value = guest.deckVote || 'No';
+      document.getElementById('edit-items').value = (guest.items || []).join(', ');
+      document.getElementById('edit-notes').value = guest.notes || '';
+
       document.getElementById('edit-modal').classList.remove('hidden');
     }
 
@@ -471,157 +564,122 @@
       document.getElementById('edit-modal').classList.add('hidden');
     }
 
-    async function saveEdit(event) {
-      event.preventDefault();
+    async function saveEditedRsvp(e) {
+      e.preventDefault();
       const id = document.getElementById('edit-id').value;
-      const name = document.getElementById('edit-name').value;
-      const status = document.getElementById('edit-status').value;
-      const notes = document.getElementById('edit-notes').value;
-      
-      // Update cloud DB
+      const rawItems = document.getElementById('edit-items').value;
+      const itemsArray = rawItems ? rawItems.split(',').map(i => i.trim()).filter(Boolean) : [];
+
+      const updatedData = {
+        id: id,
+        name: document.getElementById('edit-name').value.trim(),
+        status: document.getElementById('edit-status').value,
+        parking: document.getElementById('edit-parking').value,
+        vibe: document.getElementById('edit-vibe').value.trim(),
+        deck_vote: document.getElementById('edit-deck').value,
+        items: itemsArray,
+        notes: document.getElementById('edit-notes').value.trim()
+      };
+
       if (!useLocalStorage && supabaseClient) {
-        await supabaseClient.from('rsvps').update({ name, status, notes }).eq('id', id);
+        const { error } = await supabaseClient.from('rsvps').upsert(updatedData, { onConflict: 'id' });
+        if (error) {
+          alert("Error updating database.");
+          console.error(error);
+          return;
+        }
       }
 
-      // Update locally immediately
       const idx = rsvpList.findIndex(r => r.id === id);
       if (idx >= 0) {
-        rsvpList[idx].name = name;
-        rsvpList[idx].status = status;
-        rsvpList[idx].notes = notes;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(rsvpList));
+        rsvpList[idx] = {
+          ...rsvpList[idx],
+          name: updatedData.name,
+          status: updatedData.status,
+          parking: updatedData.parking,
+          vibe: updatedData.vibe,
+          deckVote: updatedData.deck_vote,
+          items: updatedData.items,
+          notes: updatedData.notes
+        };
       }
-      
-      loadRsvps();
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(rsvpList));
       closeEditModal();
+      updateAdminStats();
+      renderAdminTable();
+      showToast("RSVP updated successfully! 🎯");
     }
 
     async function deleteRsvp(id) {
-      if (!confirm('Are you sure you want to delete this RSVP?')) return;
-      
+      if (!confirm("Are you sure you want to delete this RSVP?")) return;
+
       if (!useLocalStorage && supabaseClient) {
         const { error } = await supabaseClient.from('rsvps').delete().eq('id', id);
-        if (error) console.error("Error deleting:", error);
+        if (error) {
+          alert("Error deleting from database.");
+          return;
+        }
       }
 
       rsvpList = rsvpList.filter(r => r.id !== id);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(rsvpList));
-      loadRsvps();
+      updateAdminStats();
+      renderAdminTable();
+      showToast("RSVP deleted successfully.");
     }
 
-    async function clearAllRsvps() {
-      if (!confirm('Are you sure you want to delete ALL RSVPs? This cannot be undone!')) return;
-      
-      if (!useLocalStorage && supabaseClient) {
-        await supabaseClient.from('rsvps').delete().neq('id', '0'); // Fast delete all hack
+    async function clearAllData() {
+      const pin = prompt("⚠️ DANGER: Type 'NUKE' to wipe ALL RSVP records. This cannot be undone.");
+      if (pin !== 'NUKE') {
+        alert("Action cancelled.");
+        return;
       }
-      
+
+      if (!useLocalStorage && supabaseClient) {
+        const { error } = await supabaseClient.from('rsvps').delete().neq('id', '0');
+        if (error) {
+          alert("Error clearing database table.");
+          return;
+        }
+      }
+
       rsvpList = [];
       localStorage.removeItem(STORAGE_KEY);
-      loadRsvps();
-    }
-
-    // --- OTHER SETTINGS / EXPORTS ---
-
-    function loadSettings() {
-      const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
-      document.getElementById('setting-title').value = settings.title || 'THE NIGHT SHIFT';
-      document.getElementById('setting-parking').value = settings.parking || 8;
-      document.getElementById('setting-datetime').value = settings.datetime || 'Friday Night • 6:00 PM - 10:00 PM';
-      document.getElementById('setting-location').value = settings.location || "NOELLELACY'S CABAN (After you RSVP)";
-    }
-
-    function saveSettings() {
-      const settings = {
-        title: document.getElementById('setting-title').value,
-        parking: parseInt(document.getElementById('setting-parking').value),
-        datetime: document.getElementById('setting-datetime').value,
-        location: document.getElementById('setting-location').value
-      };
-      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-      alert('Settings saved! They will be applied to the frontend.');
+      updateAdminStats();
+      renderAdminTable();
+      showToast("All data cleared.");
     }
 
     function exportCSV() {
-      const headers = ['Name', 'Status', 'Vibe', 'Parking', 'Items', 'Deck Vote', 'Notes', 'Timestamp'];
-      const rows = rsvpList.map(r => [
-        r.name,
-        r.status,
-        r.vibe || '',
-        r.parking,
-        r.items ? r.items.join('; ') : '',
-        r.deckVote,
-        r.notes || '',
-        r.timestamp || ''
-      ]);
-      const csv = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
-      downloadFile(csv, 'nightshift-rsvps.csv', 'text/csv');
-    }
-
-    function exportJSON() {
-      downloadFile(JSON.stringify(rsvpList, null, 2), 'nightshift-rsvps.json', 'application/json');
-    }
-
-    function copyWhatsAppAdmin() {
-      const confirmed = rsvpList.filter(r => r.status === 'going' || r.status === 'late');
-      const drivers = rsvpList.filter(r => r.status !== 'ghosting' && r.parking === 'driving_spot');
-      
-      let summary = `🎲 THE NIGHT SHIFT: NOELLELACY'S GAME NIGHT PT. 2 (ADMIN SUMMARY)\n`;
-      summary += `Confirmed Squad: ${confirmed.length} players\n`;
-      summary += `Driveway Spots Claimed (${drivers.length}/8): ${drivers.map(d => d.name).join(', ') || 'None'}\n\n`;
-      summary += `👥 FULL ROSTER:\n`;
-      rsvpList.forEach(r => {
-        const status = r.status === 'going' ? '🎯 In' : r.status === 'late' ? '⏳ Maybe' : '❌ Out';
-        summary += `${status} ${r.name} | ${r.parking} | ${r.items ? r.items.join(', ') : 'None'}\n`;
-      });
-      
-      navigator.clipboard.writeText(summary);
-      alert('Summary copied to clipboard!');
-    }
-
-    function importData() {
-      document.getElementById('import-area').classList.toggle('hidden');
-    }
-
-    async function processImport() {
-      try {
-        const data = JSON.parse(document.getElementById('import-textarea').value);
-        if (Array.isArray(data)) {
-          if (!useLocalStorage && supabaseClient) {
-            const mappedData = data.map(r => ({
-              id: r.id || 'ad-' + Date.now() + Math.random(),
-              name: r.name,
-              status: r.status,
-              vibe: r.vibe,
-              parking: r.parking,
-              items: r.items || [],
-              deck_vote: r.deckVote || 'No',
-              notes: r.notes || ''
-            }));
-            await supabaseClient.from('rsvps').upsert(mappedData);
-          }
-
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-          loadRsvps();
-          document.getElementById('import-area').classList.add('hidden');
-          document.getElementById('import-textarea').value = '';
-          alert('Data imported successfully!');
-        } else {
-          alert('Invalid JSON format. Expected an array.');
-        }
-      } catch (e) {
-        alert('Invalid JSON. Please check your input.');
+      if (rsvpList.length === 0) {
+        alert("No data to export!");
+        return;
       }
+
+      let csv = 'Name,Status,Vibe,Parking,Items,Deck Vote,Notes,Timestamp\n';
+      rsvpList.forEach(r => {
+        const itemsStr = `"${(r.items || []).join('; ')}"`;
+        const notesStr = `"${(r.notes || '').replace(/"/g, '""')}"`;
+        csv += `"${r.name}","${r.status}","${r.vibe || ''}","${r.parking}",${itemsStr},"${r.deckVote || 'No'}",${notesStr},"${r.timestamp || ''}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('href', url);
+      a.setAttribute('download', 'night_shift_rsvps.csv');
+      a.click();
+      showToast("CSV exported successfully! 📊");
     }
 
-    function downloadFile(content, filename, type) {
-      const blob = new Blob([content], { type });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      a.click();
-      URL.revokeObjectURL(url);
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'flex items-center gap-3 px-5 py-4 rounded-xl border-4 border-lego-black shadow-[6px_6px_0px_0px_#121212] bg-lego-green text-white text-sm font-black pointer-events-auto transform transition-all duration-300';
+      toast.innerHTML = `<span class="text-xl bg-white border-2 border-lego-black rounded-full w-8 h-8 flex items-center justify-center">🎯</span> <span>${escapeHtml(message)}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3500);
     }
 
     function escapeHtml(str) {
@@ -633,6 +691,17 @@
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
+      
+      const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+      if (settings.parking) {
+        document.getElementById('admin-max-parking').value = settings.parking;
+      }
+
+      if (window.lucide) lucide.createIcons();
+    });
   </script>
 </body>
 </html>
